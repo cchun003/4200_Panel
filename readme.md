@@ -57,13 +57,11 @@ This guide details the sequential, programmatic workflow for the analysis.
 **Optimal Language:** R
 
 **Model Specification:**
-$$
-\begin{aligned}
-\ln(P_{ibt}) = \alpha &+ \tau (S_i \times \Delta \text{Policy}_{st}) + \beta_1 S_i + \beta_2 \Delta \text{Policy}_{st} \\
-&+ \gamma_1 d_{ic} + \gamma_2 (S_i \times d_{ic}) + \gamma_3 (d_{ic} \times \Delta \text{Policy}_{st}) + \gamma_4 (S_i \times d_{ic} \times \Delta \text{Policy}_{st}) \\
-&+ \phi_{b,t} + \mathbf{X}_{ict}\lambda + \varepsilon_{ibt}
-\end{aligned}
-$$
+```math
+\ln(P_{ibt}) = \alpha + \tau (S_i \times \Delta \text{Policy}_{st}) + \beta_1 S_i + \beta_2 \Delta \text{Policy}_{st}
++ \gamma_1 d_{ic} + \gamma_2 (S_i \times d_{ic}) + \gamma_3 (d_{ic} \times \Delta \text{Policy}_{st}) + \gamma_4 (S_i \times d_{ic} \times \Delta \text{Policy}_{st})
++ \phi_{b,t} + \mathbf{X}_{ict}\lambda + \varepsilon_{ibt}
+```
 
 - **$\tau$:** Primary DiDC LATE estimator for tuition gap capitalization.
 - **$\phi_{b,t}$:** Border-segment-by-year fixed effects.
