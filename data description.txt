@@ -1,0 +1,22 @@
+ACS ZCTA Panel Data Description
+
+File name: acs_zcta_panel.csv
+Unit of observation: ZIP Code Tabulation Area (ZCTA) by Year
+Time coverage: 2012 - 2026 (Annual longitudinal panel)
+Source: U.S. Census Bureau, American Community Survey (ACS) 5-year estimates
+
+Variables:
+1. NAME: Full geographic name of the ZCTA (e.g., "ZCTA5 00601").
+2. Median_Household_Income: Median household income in the past 12 months (in inflation-adjusted USD). ACS Variable: B19013_001E.
+3. Median_Real_Estate_Taxes: Median real estate taxes paid on owner-occupied housing units. ACS Variable: B25103_001E.
+4. Median_Home_Value: Median value of owner-occupied housing units. ACS Variable: B25077_001E.
+5. state: State FIPS code associated with the ZCTA.
+6. ZCTA: 5-digit ZIP Code Tabulation Area identifier.
+7. year: The survey year or forward-filled year for the observation.
+8. Effective_Property_Tax_Rate: Calculated as Median_Real_Estate_Taxes divided by Median_Home_Value.
+
+Note on Methodology:
+- Data for 2012-2024 were derived from the respective ACS 5-year rolling estimates.
+- Data for 2025 and 2026 were constructed by carrying forward the 2024 estimates, as actual data for these years are not yet available from the Census Bureau.
+- Negative values returned by the Census API (indicating missing or suppressed data) have been treated as nulls.
+- Effective property tax rates are calculated based on local median values to minimize the impact of outliers in aggregate measures.
