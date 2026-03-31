@@ -57,3 +57,44 @@ Variables:
 4. ZIPName: Descriptive name of the ZCTA.
 5. pop20: Total population in the specific ZCTA-County intersection (2020 Decennial Census).
 6. afact: ZCTA-to-County allocation factor (the fraction of the ZCTA population residing in that specific county intersection). Used for intensive variable (e.g., rates) mapping.
+
+
+--------------------------------------------------
+
+Tax Liability ZCTA Panel Data Description
+
+File name: taxsim_zcta_panel.csv
+Unit of observation: ZIP Code Tabulation Area (ZCTA) by Year
+Time coverage: 2012 - 2026 (Annual longitudinal panel)
+Source: NBER TAXSIM 35 Microsimulation (via `usincometaxes` R package)
+
+Variables:
+1. ZCTA: 5-digit ZIP Code Tabulation Area identifier.
+2. year: The data year or forward-filled year for the observation.
+3. Median_Household_Income: Annual nominal household income (ACS Variable: B19013_001E).
+4. fiitax: Federal Income Tax liability for a synthetic median-income household (Married Filing Jointly, 2 dependents, age 40). Includes refundable credits (e.g., CTC).
+5. siitax: State Income Tax liability for the same synthetic household.
+6. stab: Two-letter state abbreviation assigned to the ZCTA.
+
+Note on Methodology:
+- Tax liabilities were calculated using the TAXSIM 35 engine for a deterministic synthetic "median homebuyer" profile.
+- Synthetic Profile: Married Filing Jointly, 2 dependents, primary and secondary earners age 40.
+- Wage Assumption: 100% of household income assigned to primary earner (`pwages`).
+- Deduction Assumption: Standard deduction model utilized; mortgage interest deduction (`mortgage`) set to $0.
+- Year Cap: TAXSIM 35 simulations for 2024-2026 utilize the 2023 statutory tax environment.
+
+--------------------------------------------------
+
+Geographic Crosswalk (State) Data Description
+
+File name: zcta_state_crosswalk.csv
+Source: Missouri Census Data Center (Geocorr 2022)
+Purpose: Relational mapping between ZCTAs and U.S. States/Territories to assign policy regimes.
+
+Variables:
+1. zcta: 5-digit ZCTA code.
+2. state: 2-digit State FIPS code.
+3. stab: Two-letter state abbreviation.
+4. ZIPName: Parent ZCTA name (Census).
+5. pop20: Total population in the specific ZCTA-State intersection (2020 Census).
+6. afact: ZCTA-to-State allocation factor (fraction of ZCTA residents in that state). Used for "Primary State" assignment logic.
