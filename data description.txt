@@ -20,3 +20,40 @@ Note on Methodology:
 - Data for 2025 and 2026 were constructed by carrying forward the 2024 estimates, as actual data for these years are not yet available from the Census Bureau.
 - Negative values returned by the Census API (indicating missing or suppressed data) have been treated as nulls.
 - Effective property tax rates are calculated based on local median values to minimize the impact of outliers in aggregate measures.
+
+--------------------------------------------------
+
+Macroeconomic ZCTA Panel Data Description
+
+File name: macro_zcta_panel.csv
+Unit of observation: ZIP Code Tabulation Area (ZCTA) by Year
+Time coverage: 2012 - 2026 (Annual longitudinal panel)
+Source: Bureau of Economic Analysis (BEA) and Bureau of Labor Statistics (BLS)
+
+Variables:
+1. ZCTA: 5-digit ZIP Code Tabulation Area identifier.
+2. year: The data year or forward-filled year for the observation.
+3. Real_GDP_ZCTA: Estimated Real GDP for the ZCTA (in chained dollars), apportioned from county-level Real GDP (Table CAGDP9) using population-weighted intersection shares.
+4. Unemployment_Rate_ZCTA: Estimated local unemployment rate, calculated as a population-weighted average of intersecting counties using residential allocation factors.
+
+Note on Methodology:
+- County-level macroeconomic data (GDP and Unemployment) were mapped to ZCTAs using Option B (Population-Weighted Allocation).
+- 2025 and 2026 values are forward-filled from 2024 estimates.
+- Real GDP is mapped from County to ZCTA based on the ZCTA's share of the county's total population.
+- Unemployment rates are mapped using the `afact` (ZCTA-to-County allocation factor) to represent the rate experienced by the ZCTA's residents.
+
+--------------------------------------------------
+
+Geographic Crosswalk Data Description
+
+File name: zcta_county_crosswalk.csv
+Source: Missouri Census Data Center (Geocorr 2022)
+Purpose: Relational mapping between County FIPS codes and ZIP Code Tabulation Areas (ZCTAs).
+
+Variables:
+1. zcta: 5-digit ZCTA code.
+2. county: 5-digit County FIPS code.
+3. CountyName: Descriptive name of the county.
+4. ZIPName: Descriptive name of the ZCTA.
+5. pop20: Total population in the specific ZCTA-County intersection (2020 Decennial Census).
+6. afact: ZCTA-to-County allocation factor (the fraction of the ZCTA population residing in that specific county intersection). Used for intensive variable (e.g., rates) mapping.
