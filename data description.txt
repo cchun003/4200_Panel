@@ -98,3 +98,26 @@ Variables:
 4. ZIPName: Parent ZCTA name (Census).
 5. pop20: Total population in the specific ZCTA-State intersection (2020 Census).
 6. afact: ZCTA-to-State allocation factor (fraction of ZCTA residents in that state). Used for "Primary State" assignment logic.
+
+--------------------------------------------------
+
+Geospatial Border Distance Panel Data Description
+
+File name: zcta_distance_panel.csv
+Unit of observation: ZIP Code Tabulation Area (ZCTA) by Border Dyad
+Time coverage: Static (Reference Year: 2020 ZCTA / 2022 State boundaries)
+Source: U.S. Census Bureau (TIGER/Line Shapefiles)
+
+Variables:
+1. zcta: 5-digit ZIP Code Tabulation Area identifier.
+2. stab: Two-letter state abbreviation of the ZCTA.
+3. border_dyad: Identifier for the state-to-state border dyad (e.g., "VA-WV"). Alphabetically ordered.
+4. S_i: Binary treatment indicator (Si = 1 if the ZCTA belongs to the alphabetically first state in the dyad, Si = 0 otherwise).
+5. dist_km: Shortest Euclidean distance from the ZCTA centroid to the specific border segment (in kilometers).
+6. d_ic: Signed distance to the border (dic = dist_km if Si = 1, dic = -dist_km if Si = 0).
+
+Note on Methodology:
+- Centroid-to-Border Calculation: Distances represent the minimum Euclidean path from 2020 ZCTA centroids to 2022 state boundaries.
+- Projection: All geometric operations were executed in the North American Albers Equal Area Conic projection (EPSG:5070) for precise meter-level distance measurement.
+- Pairwise Expansion: To support spatial DiDC analysis, the panel includes distances to ALL borders shared by a ZCTA's state, rather than just the single nearest state line.
+- Lower 48 Isolation: Analysis is restricted to the contiguous United States (excluding AK, HI, and territories).
