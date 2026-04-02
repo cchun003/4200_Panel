@@ -140,6 +140,39 @@ Variables:
 7. total_out_state_enr: Total headcount of out-of-state freshman used as weight for that state/year.
 
 Note on Methodology:
-- Data Fetching: Programmatically extracted from IPEDS using survey components HD (Header), IC_AY (Charges), and SFA (Financial Aid).
-- Weights: Enrollment-weighted average where in-state tuition is weighted by the count of first-time full-time (FTFT) students paying in-state rates, and vice versa for out-of-state.
+- Sample Restriction: All analyses are restricted to 4-year public, degree-granting universities using
+  four IPEDS HD variables: control == 1 (Public), iclevel == 1 (4-year), hloffer >= 5 (Bachelor's or
+  above as highest offering), and deggrant == 1 (degree-granting). Applied to approximately 868
+  institutions as of the 2023-24 academic year.
+- Data Fetching: Programmatically extracted from IPEDS using survey components HD (Header),
+  IC_AY (Charges), and SFA (Financial Aid).
+- Weights: In-state tuition is weighted by counts of first-time full-time (FTFT) in-state students
+  (scfa12n); out-of-state tuition is weighted by out-of-state FTFT students (scfa13n), both from
+  the SFA survey.
 - Forward-filling: 2025 and 2026 years are extrapolated based on 2024 estimates.
+
+--------------------------------------------------
+
+U.S. News Caliber Panel Data Description
+
+File name: us_news_caliber_panel.csv
+Unit of observation: State by Year
+Time coverage: 2012 - 2026 (Annual longitudinal panel)
+Source: U.S. News & World Report National University Rankings
+
+Purpose: Tracks the concentration of high-caliber public higher education within each state-year.
+
+Variables:
+1. stabbr: Two-letter state abbreviation (assigned using IPEDS crosswalk).
+2. year: Observation year (2012–2026).
+3. top_20: Count of public universities in the state ranked in the national Top 20 that year.
+4. top_50: Count of public universities in the state ranked in the national Top 50 that year.
+5. top_100: Count of public universities in the state ranked in the national Top 100 that year.
+6. top_150: Count of public universities in the state ranked in the national Top 150 that year.
+
+Note on Methodology:
+- Sample Restriction: Restricted to 4-year public, degree-granting universities using IPEDS HD
+  filters: control == 1, iclevel == 1, hloffer >= 5, deggrant == 1. U.S. News rankings are cross-
+  referenced against this IPEDS list to identify eligible institutions.
+- Threshold Counts: Counts are cumulative (top_150 includes institutions in top_100, and so on).
+- Forward-filling: Data for 2025 and 2026 are forward-filled from the 2024 ranking environment.
