@@ -176,3 +176,31 @@ Note on Methodology:
   referenced against this IPEDS list to identify eligible institutions.
 - Threshold Counts: Counts are cumulative (top_150 includes institutions in top_100, and so on).
 - Forward-filling: Data for 2025 and 2026 are forward-filled from the 2024 ranking environment.
+
+--------------------------------------------------
+
+Redfin Zip-Code Housing Panel Data Description
+
+File name: redfin_zip_annual.csv
+Unit of observation: ZIP Code by Year
+Time coverage: 2012 - 2024 (Annual longitudinal panel)
+Source: Redfin Open Data (Zip Code Market Tracker)
+
+Purpose: Provides detailed annual real estate market performance indicators at the ZIP code level.
+
+Variables:
+1. zip_code: 5-digit ZIP code identifier.
+2. year: Observation year.
+3. HOMES_SOLD: Total annual number of homes sold (Sum of monthly counts).
+4. NEW_LISTINGS: Total annual number of new listings (Sum of monthly counts).
+5. MEDIAN_SALE_PRICE: Median monthly sale price (Annual median of monthly values).
+6. MEDIAN_LIST_PRICE: Median monthly list price (Annual median of monthly values).
+7. MEDIAN_PPSF: Median monthly Price Per Square Foot (Annual median).
+8. INVENTORY: Median monthly inventory count (Annual median).
+9. MEDIAN_DOM: Median monthly Days on Market (Annual median).
+10. AVG_SALE_TO_LIST: Median sale-to-list price ratio (Annual median).
+11. SOLD_ABOVE_LIST: Median percentage of homes sold above list price (Annual median).
+
+Note on Methodology:
+- Aggregation: Monthly data from the Redfin source is aggregated to the annual level. Flow variables (Sales, Listings) are summed, while stock and price variables (Price, PPSF, DOM, Inventory) are summarized using the median to stay robust to seasonal outliers.
+- Source Path: Processed directly from the gzipped TSV sourced from Redfin's public feed.
