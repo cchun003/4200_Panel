@@ -4,3 +4,9 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 Data/Shapefiles/
+Data/IPEDS_Downloads/
+*.Rda
+.venv/
+.Rhistory
+.RData
+.Ruserdata

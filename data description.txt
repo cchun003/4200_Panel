@@ -1,123 +1,35 @@
-ACS ZCTA Panel Data Description
+# IPEDS Tuition Panel Data Description
 
-File name: acs_zcta_panel.csv
-Unit of observation: ZIP Code Tabulation Area (ZCTA) by Year
-Time coverage: 2012 - 2026 (Annual longitudinal panel)
-Source: U.S. Census Bureau, American Community Survey (ACS) 5-year estimates
+## Overview
+The `ipeds_tuition_panel.csv` file provides a longitudinal state-level panel (2012–2026) of enrollment-weighted average tuition for public institutions in the United States.
 
-Variables:
-1. NAME: Full geographic name of the ZCTA (e.g., "ZCTA5 00601").
-2. Median_Household_Income: Median household income in the past 12 months (in inflation-adjusted USD). ACS Variable: B19013_001E.
-3. Median_Real_Estate_Taxes: Median real estate taxes paid on owner-occupied housing units. ACS Variable: B25103_001E.
-4. Median_Home_Value: Median value of owner-occupied housing units. ACS Variable: B25077_001E.
-5. state: State FIPS code associated with the ZCTA.
-6. ZCTA: 5-digit ZIP Code Tabulation Area identifier.
-7. year: The survey year or forward-filled year for the observation.
-8. Effective_Property_Tax_Rate: Calculated as Median_Real_Estate_Taxes divided by Median_Home_Value.
+## Data Fetching Process
+The raw data is programmatically extracted from the National Center for Education Statistics (NCES) Integrated Postsecondary Education Data System (IPEDS) using the `ipeds` R package. For each year in the 2012–2024 period, the extraction script (`task_0.1_ipeds.R`) retrieves and dynamically joins three primary survey components:
 
-Note on Methodology:
-- Data for 2012-2024 were derived from the respective ACS 5-year rolling estimates.
-- Data for 2025 and 2026 were constructed by carrying forward the 2024 estimates, as actual data for these years are not yet available from the Census Bureau.
-- Negative values returned by the Census API (indicating missing or suppressed data) have been treated as nulls.
-- Effective property tax rates are calculated based on local median values to minimize the impact of outliers in aggregate measures.
+1. **HD (Institutional Characteristics Header):** Used to identify the institution's state abbreviation (`STABBR`), FIPS code, and control type (Public vs. Private).
+2. **IC_AY (Student Charges - Academic Year):** Used to retrieve the base tuition rates for in-state undergraduates (`tuition2`) and out-of-state undergraduates (`tuition3`).
+3. **SFA (Student Financial Aid - Part 1):** Used to retrieve the number of first-time, full-time (FTFT) degree/certificate-seeking undergraduates paying in-state tuition (`scfa12n`) vs. out-of-state tuition (`scfa13n`).
 
---------------------------------------------------
+## Derivation of Weights
+Weights are applied to create representative state-level averages that account for the distribution of students across institutions of varying sizes.
 
-Macroeconomic ZCTA Panel Data Description
+- **In-State Tuition Weighting:** The state-level in-state tuition is the enrollment-weighted average of all public institutions in that state, where the weights are the number of FTFT students paying the in-state rate.
+- **Out-of-State Tuition Weighting:** The state-level out-of-state tuition is similarly weighted by the number of FTFT students paying the out-of-state rate.
 
-File name: macro_zcta_panel.csv
-Unit of observation: ZIP Code Tabulation Area (ZCTA) by Year
-Time coverage: 2012 - 2026 (Annual longitudinal panel)
-Source: Bureau of Economic Analysis (BEA) and Bureau of Labor Statistics (BLS)
+**Mathematical Formula:**
+State Weighted Tuition = Σ (Institutional Tuition_i × Institutional Weight_i) / Σ (Institutional Weight_i)
 
-Variables:
-1. ZCTA: 5-digit ZIP Code Tabulation Area identifier.
-2. year: The data year or forward-filled year for the observation.
-3. Real_GDP_ZCTA: Estimated Real GDP for the ZCTA (in chained dollars), apportioned from county-level Real GDP (Table CAGDP9) using population-weighted intersection shares.
-4. Unemployment_Rate_ZCTA: Estimated local unemployment rate, calculated as a population-weighted average of intersecting counties using residential allocation factors.
+*Note: Since total residency-based enrollment for all undergraduates is not tracked annually in IPEDS, FTFT (First-time Full-time) counts are used as the standard research proxy for the institution's population distribution.*
 
-Note on Methodology:
-- County-level macroeconomic data (GDP and Unemployment) were mapped to ZCTAs using Option B (Population-Weighted Allocation).
-- 2025 and 2026 values are forward-filled from 2024 estimates.
-- Real GDP is mapped from County to ZCTA based on the ZCTA's share of the county's total population.
-- Unemployment rates are mapped using the `afact` (ZCTA-to-County allocation factor) to represent the rate experienced by the ZCTA's residents.
+## Outcome Variables
+Consistent with the project's timeline requirements, data for 2024 is forward-filled to 2025 and 2026 to provide a complete 2012–2026 panel.
 
---------------------------------------------------
-
-Geographic Crosswalk Data Description
-
-File name: zcta_county_crosswalk.csv
-Source: Missouri Census Data Center (Geocorr 2022)
-Purpose: Relational mapping between County FIPS codes and ZIP Code Tabulation Areas (ZCTAs).
-
-Variables:
-1. zcta: 5-digit ZCTA code.
-2. county: 5-digit County FIPS code.
-3. CountyName: Descriptive name of the county.
-4. ZIPName: Descriptive name of the ZCTA.
-5. pop20: Total population in the specific ZCTA-County intersection (2020 Decennial Census).
-6. afact: ZCTA-to-County allocation factor (the fraction of the ZCTA population residing in that specific county intersection). Used for intensive variable (e.g., rates) mapping.
-
-
---------------------------------------------------
-
-Tax Liability ZCTA Panel Data Description
-
-File name: taxsim_zcta_panel.csv
-Unit of observation: ZIP Code Tabulation Area (ZCTA) by Year
-Time coverage: 2012 - 2026 (Annual longitudinal panel)
-Source: NBER TAXSIM 35 Microsimulation (via `usincometaxes` R package)
-
-Variables:
-1. ZCTA: 5-digit ZIP Code Tabulation Area identifier.
-2. year: The data year or forward-filled year for the observation.
-3. Median_Household_Income: Annual nominal household income (ACS Variable: B19013_001E).
-4. fiitax: Federal Income Tax liability for a synthetic median-income household (Married Filing Jointly, 2 dependents, age 40). Includes refundable credits (e.g., CTC).
-5. siitax: State Income Tax liability for the same synthetic household.
-6. stab: Two-letter state abbreviation assigned to the ZCTA.
-
-Note on Methodology:
-- Tax liabilities were calculated using the TAXSIM 35 engine for a deterministic synthetic "median homebuyer" profile.
-- Synthetic Profile: Married Filing Jointly, 2 dependents, primary and secondary earners age 40.
-- Wage Assumption: 100% of household income assigned to primary earner (`pwages`).
-- Deduction Assumption: Standard deduction model utilized; mortgage interest deduction (`mortgage`) set to $0.
-- Year Cap: TAXSIM 35 simulations for 2024-2026 utilize the 2023 statutory tax environment.
-
---------------------------------------------------
-
-Geographic Crosswalk (State) Data Description
-
-File name: zcta_state_crosswalk.csv
-Source: Missouri Census Data Center (Geocorr 2022)
-Purpose: Relational mapping between ZCTAs and U.S. States/Territories to assign policy regimes.
-
-Variables:
-1. zcta: 5-digit ZCTA code.
-2. state: 2-digit State FIPS code.
-3. stab: Two-letter state abbreviation.
-4. ZIPName: Parent ZCTA name (Census).
-5. pop20: Total population in the specific ZCTA-State intersection (2020 Census).
-6. afact: ZCTA-to-State allocation factor (fraction of ZCTA residents in that state). Used for "Primary State" assignment logic.
-
---------------------------------------------------
-
-Geospatial Border Distance Panel Data Description
-
-File name: zcta_distance_panel.csv
-Unit of observation: ZIP Code Tabulation Area (ZCTA) by Border Dyad
-Time coverage: Static (Reference Year: 2020 ZCTA / 2022 State boundaries)
-Source: U.S. Census Bureau (TIGER/Line Shapefiles)
-
-Variables:
-1. zcta: 5-digit ZIP Code Tabulation Area identifier.
-2. stab: Two-letter state abbreviation of the ZCTA.
-3. border_dyad: Identifier for the state-to-state border dyad (e.g., "VA-WV"). Alphabetically ordered.
-4. S_i: Binary treatment indicator (Si = 1 if the ZCTA belongs to the alphabetically first state in the dyad, Si = 0 otherwise).
-5. dist_km: Shortest Euclidean distance from the ZCTA centroid to the specific border segment (in kilometers).
-6. d_ic: Signed distance to the border (dic = dist_km if Si = 1, dic = -dist_km if Si = 0).
-
-Note on Methodology:
-- Centroid-to-Border Calculation: Distances represent the minimum Euclidean path from 2020 ZCTA centroids to 2022 state boundaries.
-- Projection: All geometric operations were executed in the North American Albers Equal Area Conic projection (EPSG:5070) for precise meter-level distance measurement.
-- Pairwise Expansion: To support spatial DiDC analysis, the panel includes distances to ALL borders shared by a ZCTA's state, rather than just the single nearest state line.
-- Lower 48 Isolation: Analysis is restricted to the contiguous United States (excluding AK, HI, and territories).
+| Column | Description |
+|:---|:---|
+| `stabbr` | Two-letter state abbreviation. |
+| `year` | Academic year (2012–2026). |
+| `weighted_in_state` | State-average in-state tuition (weighted by in-state freshman enrollment). |
+| `weighted_out_of_state` | State-average out-of-state tuition (weighted by out-of-state freshman enrollment). |
+| `inst_count` | Number of public institutions included in the state average for that year. |
+| `total_in_state_enr` | Total headcount of in-state freshman used as weight for that state/year. |
+| `total_out_state_enr` | Total headcount of out-of-state freshman used as weight for that state/year. |
