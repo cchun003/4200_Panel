@@ -33,14 +33,14 @@ Source: Bureau of Economic Analysis (BEA) and Bureau of Labor Statistics (BLS)
 Variables:
 1. ZCTA: 5-digit ZIP Code Tabulation Area identifier.
 2. year: The data year or forward-filled year for the observation.
-3. Real_GDP_ZCTA: Estimated Real GDP for the ZCTA (in chained dollars), apportioned from county-level Real GDP (Table CAGDP9) using population-weighted intersection shares.
-4. Unemployment_Rate_ZCTA: Estimated local unemployment rate, calculated as a population-weighted average of intersecting counties using residential allocation factors.
+3. Real_GDP_per_capita_ZCTA: Real GDP per capita (in chained dollars), calculated at the county level and mapped to ZCTAs as a regional environmental indicator.
+4. Unemployment_Rate_ZCTA: Estimated local unemployment rate, calculated at the county level and mapped to ZCTAs.
 
 Note on Methodology:
-- County-level macroeconomic data (GDP and Unemployment) were mapped to ZCTAs using Option B (Population-Weighted Allocation).
+- Variable Type: Both GDP per capita and Unemployment are treated as Intensive Regional Environment variables.
+- Calculation: Real GDP per capita is derived by fetching Total Real GDP (BEA CAGDP9) and County Population (BEA CAINC1), then dividing.
+- Mapping: Macroeconomic conditions are assigned to ZCTAs based on residency allocation factors (afact from MCDC Geocorr 2022). This represents the "experienced" economic environment for residents in that neighborhood.
 - 2025 and 2026 values are forward-filled from 2024 estimates.
-- Real GDP is mapped from County to ZCTA based on the ZCTA's share of the county's total population.
-- Unemployment rates are mapped using the `afact` (ZCTA-to-County allocation factor) to represent the rate experienced by the ZCTA's residents.
 
 --------------------------------------------------
 
