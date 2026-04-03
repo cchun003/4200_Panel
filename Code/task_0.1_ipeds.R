@@ -99,11 +99,7 @@ for (yr in years) {
         sfa |> select(unitid, scfa12n, scfa13n),
         by = "unitid"
       ) |>
-      # Restrict to 4-year public bachelor's-degree-granting universities:
-      #   control == 1  : Public
-      #   iclevel == 1  : Four-or-more year institution
-      #   hloffer >= 5  : Highest offering is Bachelor's or above
-      #   deggrant == 1 : Confirmed degree-granting status
+      # Restrict to 4-year public bachelor's-degree-granting universities
       filter(
         control == 1,
         iclevel == 1,

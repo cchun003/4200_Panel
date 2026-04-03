@@ -11,16 +11,18 @@
 │   ├── task_2.1_geospatial_distance.py
 │   ├── task_2.2_border_segmentation.py
 │   ├── task_2.2b_panel_validation.py
-│   └── task_2.2c_master_panel_integration.py
+│   ├── task_2.2c_master_panel_integration.py
+│   └── task_2.3_bandwidth_selection.R
 ├── Data
-│   ├── IPEDS_Downloads/ (Raw IPEDS files - gitignored)
-│   ├── Shapefiles/ (Census Shapefiles - gitignored)
+│   ├── IPEDS_Downloads/ (Raw NCES data)
+│   ├── Shapefiles/ (Census TIGER/Line)
 │   ├── ipeds_public_universities.csv
 │   ├── US-News-National-University-Rankings-Top-150-Through-2026.xlsx
 │   ├── zcta_county_crosswalk.csv
 │   └── zcta_state_crosswalk.csv
 ├── Output
 │   ├── acs_zcta_panel.csv
+│   ├── estimation_didc_panel.csv
 │   ├── ipeds_tuition_panel.csv
 │   ├── macro_zcta_panel.csv
 │   ├── master_didc_panel.csv

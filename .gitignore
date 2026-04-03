@@ -12,3 +12,4 @@ Data/IPEDS_Downloads/
 .Ruserdata
 
 Output/master_didc_panel.csv
+Output/estimation_didc_panel.csv

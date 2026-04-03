@@ -110,3 +110,25 @@ Note on Methodology:
 - Integration: Merges the spatial segmentation (zcta_distance_segment_panel) with longitudinal ZCTA-year controls and housing outcomes.
 - Dyadic Gaps: Policy gaps are calculated for each year and each state pair to capture the time-varying shock intensity.
 - Dimensional Expansion: ZCTAs near multiple borders are duplicated across dyads to contribute as local controls for each specific policy discontinuity.
+
+--------------------------------------------------
+
+Estimation Sample Panel Data Description
+
+File name: estimation_didc_panel.csv
+Unit of observation: ZCTA by Year by Border Segment
+Time coverage: 2012 - 2026
+Source: Integrated Master Panel with MSE-Optimal Bandwidth Selection (rdbwselect)
+
+Purpose: The finalized regression-ready dataset, restricted to observations within the state-border "bandwidth of indifference" as determined by local polynomial optimization.
+
+Key Variables:
+1. h_star: Localized MSE-optimal bandwidth (in km) calculated via rdrobust (Calonico et al., 2014) for each specific border segment based on baseline year home values.
+2. Estimation_Sample: Binary indicator (1 = Observation is within h_star of the border; 0 = Observation is excluded).
+3. All prior variables from master_didc_panel.csv (Deltas, Interactions, Log-Outcomes).
+
+Note on Methodology:
+- Bandwidth Selection: For each border segment, an optimal spatial bandwidth (h*) is estimated using the MSE-optimal selector on the 2012 baseline cross-section of Log Median Home Value. 
+- Hierarchical Fallback: If a segment has insufficient observations (<15 per side), the optimization falls back to the parent border dyad's h*. 
+- Sample Size: The finalized estimation sample (Estimation_Sample=1) contains 448,941 observations (16.3% of the master pool), ensuring that the DiDC analysis focuses strictly on the geographic discontinuities.
+- Longitudinal Projection: h* calculated in 2012 is applied statically throughout the 2012-2026 panel to ensure a balanced, time-invariant geographic sample across the treatment horizon.
