@@ -17,9 +17,7 @@ Variables:
 
 Note on Methodology:
 - Data for 2012-2024 were derived from the respective ACS 5-year rolling estimates.
-- Data for 2025 and 2026 were constructed by carrying forward the 2024 estimates, as actual data for these years are not yet available from the Census Bureau.
-- Negative values returned by the Census API (indicating missing or suppressed data) have been treated as nulls.
-- Effective property tax rates are calculated based on local median values to minimize the impact of outliers in aggregate measures.
+- Data for 2025 and 2026 were constructed by carrying forward the 2024 estimates.
 
 --------------------------------------------------
 
@@ -39,64 +37,7 @@ Variables:
 Note on Methodology:
 - Variable Type: Both GDP per capita and Unemployment are treated as Intensive Regional Environment variables.
 - Calculation: Real GDP per capita is derived by fetching Total Real GDP (BEA CAGDP9) and County Population (BEA CAINC1), then dividing.
-- Mapping: Macroeconomic conditions are assigned to ZCTAs based on residency allocation factors (afact from MCDC Geocorr 2022). This represents the "experienced" economic environment for residents in that neighborhood.
-- 2025 and 2026 values are forward-filled from 2024 estimates.
-
---------------------------------------------------
-
-Geographic Crosswalk Data Description
-
-File name: zcta_county_crosswalk.csv
-Source: Missouri Census Data Center (Geocorr 2022)
-Purpose: Relational mapping between County FIPS codes and ZIP Code Tabulation Areas (ZCTAs).
-
-Variables:
-1. zcta: 5-digit ZCTA code.
-2. county: 5-digit County FIPS code.
-3. CountyName: Descriptive name of the county.
-4. ZIPName: Descriptive name of the ZCTA.
-5. pop20: Total population in the specific ZCTA-County intersection (2020 Decennial Census).
-6. afact: ZCTA-to-County allocation factor (the fraction of the ZCTA population residing in that specific county intersection). Used for intensive variable (e.g., rates) mapping.
-
---------------------------------------------------
-
-Tax Liability ZCTA Panel Data Description
-
-File name: taxsim_zcta_panel.csv
-Unit of observation: ZIP Code Tabulation Area (ZCTA) by Year
-Time coverage: 2012 - 2026 (Annual longitudinal panel)
-Source: NBER TAXSIM 35 Microsimulation (via `usincometaxes` R package)
-
-Variables:
-1. ZCTA: 5-digit ZIP Code Tabulation Area identifier.
-2. year: The data year or forward-filled year for the observation.
-3. Median_Household_Income: Annual nominal household income (ACS Variable: B19013_001E).
-4. fiitax: Federal Income Tax liability for a synthetic median-income household (Married Filing Jointly, 2 dependents, age 40). Includes refundable credits (e.g., CTC).
-5. siitax: State Income Tax liability for the same synthetic household.
-6. stab: Two-letter state abbreviation assigned to the ZCTA.
-
-Note on Methodology:
-- Tax liabilities were calculated using the TAXSIM 35 engine for a deterministic synthetic "median homebuyer" profile.
-- Synthetic Profile: Married Filing Jointly, 2 dependents, primary and secondary earners age 40.
-- Wage Assumption: 100% of household income assigned to primary earner (`pwages`).
-- Deduction Assumption: Standard deduction model utilized; mortgage interest deduction (`mortgage`) set to $0.
-- Year Cap: TAXSIM 35 simulations for 2024-2026 utilize the 2023 statutory tax environment.
-
---------------------------------------------------
-
-Geographic Crosswalk (State) Data Description
-
-File name: zcta_state_crosswalk.csv
-Source: Missouri Census Data Center (Geocorr 2022)
-Purpose: Relational mapping between ZCTAs and U.S. States/Territories to assign policy regimes.
-
-Variables:
-1. zcta: 5-digit ZCTA code.
-2. state: 2-digit State FIPS code.
-3. stab: Two-letter state abbreviation.
-4. ZIPName: Parent ZCTA name (Census).
-5. pop20: Total population in the specific ZCTA-State intersection (2020 Census).
-6. afact: ZCTA-to-State allocation factor (fraction of ZCTA residents in that state). Used for "Primary State" assignment logic.
+- Mapping: Macroeconomic conditions are assigned to ZCTAs based on residency allocation factors (afact from MCDC Geocorr 2022).
 
 --------------------------------------------------
 
@@ -104,103 +45,68 @@ Geospatial Border Distance Panel Data Description
 
 File name: zcta_distance_panel.csv
 Unit of observation: ZIP Code Tabulation Area (ZCTA) by Border Dyad
-Time coverage: Static (Reference Year: 2020 ZCTA / 2022 State boundaries)
 Source: U.S. Census Bureau (TIGER/Line Shapefiles)
 
 Variables:
 1. zcta: 5-digit ZIP Code Tabulation Area identifier.
 2. stab: Two-letter state abbreviation of the ZCTA.
-3. border_dyad: Identifier for the state-to-state border dyad (e.g., "VA-WV"). Alphabetically ordered.
+3. border_dyad: Identifier for the state-to-state border dyad (e.g., "VA-WV").
 4. S_i: Binary treatment indicator (Si = 1 if the ZCTA belongs to the alphabetically first state in the dyad, Si = 0 otherwise).
-5. dist_km: Shortest Euclidean distance from the ZCTA centroid to the specific border segment (in kilometers).
+5. dist_km: Shortest Euclidean distance from the ZCTA centroid to the specific border segment.
 6. d_ic: Signed distance to the border (dic = dist_km if Si = 1, dic = -dist_km if Si = 0).
-
-Note on Methodology:
-- Centroid-to-Border Calculation: Distances represent the minimum Euclidean path from 2020 ZCTA centroids to 2022 state boundaries.
-- Projection: All geometric operations were executed in the North American Albers Equal Area Conic projection (EPSG:5070) for precise meter-level distance measurement.
-- Pairwise Expansion: To support spatial DiDC analysis, the panel includes distances to ALL borders shared by a ZCTA's state, rather than just the single nearest state line.
-- Lower 48 Isolation: Analysis is restricted to the contiguous United States (excluding AK, HI, and territories).
 
 --------------------------------------------------
 
 IPEDS Tuition Panel Data Description
 
 File name: ipeds_tuition_panel.csv
-Unit of observation: State by Year
-Time coverage: 2012 - 2026 (Annual longitudinal panel)
-Source: National Center for Education Statistics (NCES) - IPEDS
-
-Variables:
-1. stabbr: Two-letter state abbreviation.
-2. year: Academic year (2012–2026).
-3. weighted_in_state: State-average in-state tuition (weighted by in-state freshman enrollment).
-4. weighted_out_of_state: State-average out-of-state tuition (weighted by out-of-state freshman enrollment).
-5. inst_count: Number of public institutions included in the state average for that year.
-6. total_in_state_enr: Total headcount of in-state freshman used as weight for that state/year.
-7. total_out_state_enr: Total headcount of out-of-state freshman used as weight for that state/year.
+Unit of observation: State by Year (2012-2026)
+Source: NCES IPEDS
 
 Note on Methodology:
-- Sample Restriction: All analyses are restricted to 4-year public, degree-granting universities using
-  four IPEDS HD variables: control == 1 (Public), iclevel == 1 (4-year), hloffer >= 5 (Bachelor's or
-  above as highest offering), and deggrant == 1 (degree-granting). Applied to approximately 868
-  institutions as of the 2023-24 academic year.
-- Data Fetching: Programmatically extracted from IPEDS using survey components HD (Header),
-  IC_AY (Charges), and SFA (Financial Aid).
-- Weights: In-state tuition is weighted by counts of first-time full-time (FTFT) in-state students
-  (scfa12n); out-of-state tuition is weighted by out-of-state FTFT students (scfa13n), both from
-  the SFA survey.
-- Forward-filling: 2025 and 2026 years are extrapolated based on 2024 estimates.
-
---------------------------------------------------
-
-U.S. News Caliber Panel Data Description
-
-File name: us_news_caliber_panel.csv
-Unit of observation: State by Year
-Time coverage: 2012 - 2026 (Annual longitudinal panel)
-Source: U.S. News & World Report National University Rankings
-
-Purpose: Tracks the concentration of high-caliber public higher education within each state-year.
-
-Variables:
-1. stabbr: Two-letter state abbreviation (assigned using IPEDS crosswalk).
-2. year: Observation year (2012–2026).
-3. top_20: Count of public universities in the state ranked in the national Top 20 that year.
-4. top_50: Count of public universities in the state ranked in the national Top 50 that year.
-5. top_100: Count of public universities in the state ranked in the national Top 100 that year.
-6. top_150: Count of public universities in the state ranked in the national Top 150 that year.
-
-Note on Methodology:
-- Sample Restriction: Restricted to 4-year public, degree-granting universities using IPEDS HD
-  filters: control == 1, iclevel == 1, hloffer >= 5, deggrant == 1. U.S. News rankings are cross-
-  referenced against this IPEDS list to identify eligible institutions.
-- Threshold Counts: Counts are cumulative (top_150 includes institutions in top_100, and so on).
-- Forward-filling: Data for 2025 and 2026 are forward-filled from the 2024 ranking environment.
+- Sample Restriction: 4-year public, degree-granting universities (control=1, iclevel=1, hloffer>=5, deggrant=1). 
+- Weights: In-state tuition weighted by FTFT in-state students (scfa12n); out-of-state tuition weighted by FTFT out-of-state students (scfa13n).
 
 --------------------------------------------------
 
 Redfin Zip-Code Housing Panel Data Description
 
 File name: redfin_zip_annual.csv
-Unit of observation: ZIP Code by Year
-Time coverage: 2012 - 2024 (Annual longitudinal panel)
-Source: Redfin Open Data (Zip Code Market Tracker)
-
-Purpose: Provides detailed annual real estate market performance indicators at the ZIP code level.
+Unit of observation: ZIP Code by Year (2012-2024)
+Source: Redfin Open Data
 
 Variables:
-1. zip_code: 5-digit ZIP code identifier.
-2. year: Observation year.
-3. HOMES_SOLD: Total annual number of homes sold (Sum of monthly counts).
-4. NEW_LISTINGS: Total annual number of new listings (Sum of monthly counts).
-5. MEDIAN_SALE_PRICE: Median monthly sale price (Annual median of monthly values).
-6. MEDIAN_LIST_PRICE: Median monthly list price (Annual median of monthly values).
-7. MEDIAN_PPSF: Median monthly Price Per Square Foot (Annual median).
-8. INVENTORY: Median monthly inventory count (Annual median).
-9. MEDIAN_DOM: Median monthly Days on Market (Annual median).
-10. AVG_SALE_TO_LIST: Median sale-to-list price ratio (Annual median).
-11. SOLD_ABOVE_LIST: Median percentage of homes sold above list price (Annual median).
+1. zip_code: 5-digit identifier.
+2. year: Academic year.
+3. MEDIAN_PPSF: Median Price Per Square Foot (Annual median).
+4. MEDIAN_SALE_PRICE: Median Sale Price (Annual median).
+5. HOMES_SOLD: Count of total sales (Annual sum).
+6. INVENTORY: Median active inventory (Annual median).
+
+--------------------------------------------------
+
+Master DiDC Spatial Panel Data Description
+
+File name: master_didc_panel.csv
+Unit of observation: ZCTA by Year by Border Segment
+Time coverage: 2012 - 2026
+Source: Integrated Panel (ACS, Macro, IPEDS, US News, Redfin, Border Distance)
+
+Purpose: The final integrated dataset for spatial Difference-in-Discontinuities analysis of public university policy shocks.
+
+Key Variables:
+1. border_dyad: The specific state pair (e.g., "NC-VA").
+2. segment_id: High-resolution border segment identifier.
+3. S_i: Strategic side indicator (1 = Alphabetic First, 0 = Second).
+4. d_ic: Signed distance to border (Positive for S_i=1).
+5. delta_in_state_tuition: Policy Gap (State A tuition - State B tuition).
+6. delta_top_100_caliber: Caliber Gap (State A Top 100 count - State B Top 100 count).
+7. interaction_tuition: Core DiDC variable (S_i * delta_in_state_tuition).
+8. interaction_caliber: Core DiDC variable (S_i * delta_top_100_caliber).
+9. ln_median_ppsf: Outcome (Log of Median Price Per Square Foot).
+10. ln_real_gdp_pc: Control (Log of Real GDP per capita).
 
 Note on Methodology:
-- Aggregation: Monthly data from the Redfin source is aggregated to the annual level. Flow variables (Sales, Listings) are summed, while stock and price variables (Price, PPSF, DOM, Inventory) are summarized using the median to stay robust to seasonal outliers.
-- Source Path: Processed directly from the gzipped TSV sourced from Redfin's public feed.
+- Integration: Merges the spatial segmentation (zcta_distance_segment_panel) with longitudinal ZCTA-year controls and housing outcomes.
+- Dyadic Gaps: Policy gaps are calculated for each year and each state pair to capture the time-varying shock intensity.
+- Dimensional Expansion: ZCTAs near multiple borders are duplicated across dyads to contribute as local controls for each specific policy discontinuity.

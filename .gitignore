@@ -10,3 +10,5 @@ Data/IPEDS_Downloads/
 .Rhistory
 .RData
 .Ruserdata
+
+Output/master_didc_panel.csv
