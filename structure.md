@@ -12,10 +12,11 @@
 │   ├── task_2.2_border_segmentation.py
 │   ├── task_2.2b_panel_validation.py
 │   ├── task_2.2c_master_panel_integration.py
-│   └── task_2.3_bandwidth_selection.R
+│   ├── task_2.3_bandwidth_selection.R
+│   └── task_3.1_didc_regression.R
 ├── Data
-│   ├── IPEDS_Downloads/ (Raw NCES data)
-│   ├── Shapefiles/ (Census TIGER/Line)
+│   ├── IPEDS_Downloads/ (Raw data - ignored)
+│   ├── Shapefiles/ (TIGER files - ignored)
 │   ├── ipeds_public_universities.csv
 │   ├── US-News-National-University-Rankings-Top-150-Through-2026.xlsx
 │   ├── zcta_county_crosswalk.csv
