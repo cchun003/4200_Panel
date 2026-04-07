@@ -4,30 +4,48 @@ This document outlines the detailed execution logic for exploring heterogeneous 
 
 ## 1. Single-Way vs Two-Way Standard Error Clustering
 **Status:** In Progress
-- **Logic:** Two-way clustering (`~ zcta + border_dyad`) might be excessively punishing on the variance-covariance matrix, inflating our confidence intervals. 
-- **Execution:** We will run the baseline Full DiDC model with single-way clustering (`~ segment_id` or `~ zcta`) and present it alongside the original two-way clustered results for comparison.
+- **Logic:** Two-way clustering (`~ zcta + border_dyad`) might be excessively punishing on the variance-covariance matrix. We will evaluate models with single-way clustering (`~ segment_id` or `~ zcta`) and present them alongside the original two-way clustered results for comparison.
 
 ## 2. Timeframe Sub-sampling (Pre-COVID vs COVID Era)
 **Status:** In Progress
-- **Logic:** The COVID-19 housing market boom introduced intense structural breaks, fundamentally altering housing demand characteristics (e.g. rush for space rather than local amenities).
-- **Execution:** We will slice the `estimation_didc_panel.csv` into a Pre-COVID sample (2012-2019) and a COVID-era sample (2020-2026), testing the capitalization of higher education amenities dynamically. If preferences for amenities shifted, significant results may emerge in the pre-crisis era.
+- **Logic:** The COVID-19 housing boom introduced intense structural breaks. We will slice the panel into a Pre-COVID sample (2012-2019) and a COVID-era sample (2020-2026) to test capitalization dynamically.
 
 ## 3. Alternative Measures of Y & Housing Architectural Controls
 **Status:** Planned
-- **Logic:** Comparing median prices per square foot across a border assumes housing stock is identical. We need structural controls to prevent omitted variable bias.
-- **Execution (Data Pipeline Instructions):** 
-    1. Open the original Python `census` API querying script.
-    2. Add queries for structural variables from the ACS 5-Year Estimates profile: `B25017_001E` (Median Rooms), `B25035_001E` (Median Year Structure Built).
-    3. We could also query `B25077_001E` (Median Home Value) or `B25064_001E` (Median Gross Rent) as alternative dependent variables.
-    4. Re-run the data integration workflow (Tasks 1 & 2) to regenerate `estimation_didc_panel.csv`.
-    5. Fit the models incorporating these new `X_ict` confounders.
+- **Logic:** Comparing prices per square foot assumes housing stock is identical. We need structural controls to prevent omitted variable bias.
+- **Execution:** Update the Python `census` API querying script to add structural variables (`B25017_001E` Median Rooms, `B25035_001E` Median Year Built) and alternative dependent variables (`B25077_001E` Median Home Value, `B25064_001E` Median Gross Rent). 
 
-## 4. Alternative Thresholds for Treatment Variable X
+## 4. Definitions of "Flagship" Caliber Tiers (Non-linear Option Value)
 **Status:** Planned
-- **Logic:** Consumers may only value large threshold differences rather than reacting continuously per $1,000 of tuition gap.
-- **Execution:** Discretize the `delta_in_state_tuition` gap into categorical bins or a binary indicator variable (e.g., $Gap > $5k). Use this indicator inside the DiDC interaction terms.
+- **Logic:** Option value is likely non-linear. Households may not cross state lines for a Top 100 school, but access to a Top 20 public Ivy is a massive financial asset.
+- **Execution:** Substitute the `delta_top_100_caliber` variable with Top 20, Top 50, and Top 150 variants. Observe if the coefficient ($\tau$) becomes positive and highly significant specifically at the most elite tiers.
 
-## 5. Cross-Sectional Splitting (Urban vs. Rural)
+## 5. The Marginal "Tax Cliff" Border
 **Status:** Planned
-- **Logic:** Housing supply elasticity matters. In rural locations where new housing is easily built, price capitalization fails to materialize.
-- **Execution:** Categorize ZCTAs into Urban Core vs Rural segments based on population density, and estimate models separately on these distinct subsets.
+- **Logic:** Local property and state income taxes heavily dominate housing prices. At borders where tax regimes are virtually identical, the tuition gap becomes the primary financial differentiator.
+- **Execution:** Compute the absolute state income tax differential ($|\Delta \text{Tax}_{st}|$) for each dyad. Restrict the estimation sample to the lowest quartile of tax differentials and re-run the DiDC model.
+
+## 6. State Pairs with Similar Caliber (Pure Price Elasticity)
+**Status:** Planned
+- **Logic:** Isolating pure price elasticity. If both states have the exact same number of elite institutions, the option value of prestige is equalized. Sorting is driven purely by tuition savings.
+- **Execution:** Restrict the sample to dyads where `delta_top_50_caliber == 0` and evaluate the `delta_in_state_tuition` coefficient.
+
+## 7. Interstate Tuition Reciprocity Agreements
+**Status:** Planned
+- **Logic:** Crossing borders does not trigger out-of-state tuition if reciprocity agreements (e.g., WUE, MHEC) exist. The capitalization effect should be zero at these borders.
+- **Execution:** Create a binary matrix flagging dyads with reciprocity agreements. Split the sample into reciprocity vs. non-reciprocity borders.
+
+## 8. Spatial Distance to the Flagship Campus
+**Status:** Planned
+- **Logic:** The option value capitalization should be strongest in ZCTAs that actually lie within a reasonable driving distance of the flagship campus.
+- **Execution:** Calculate distance from border ZCTAs to the nearest Top 50 university in their state via Geopandas. Split sample into "Close" vs. "Far".
+
+## 9. Socioeconomic Segmentation (High vs. Low Income Neighborhoods)
+**Status:** Planned
+- **Logic:** High-income households are inelastic to tuition but sensitive to prestige. Middle/lower-income households are highly sensitive to the tuition gap.
+- **Execution:** Subset local ZCTAs into income quartiles using `Median_Household_Income`. Run the tuition model on the bottom 50% and the caliber model on the top 50%.
+
+## 10. Cross-Sectional Splitting (Urban vs. Rural)
+**Status:** Planned
+- **Logic:** Housing supply elasticity drives capitalization. In rural areas, new housing absorbs the demand; in urban constrained locations, prices rise.
+- **Execution:** Categorize ZCTAs into Urban Core vs Rural segments based on population density.
