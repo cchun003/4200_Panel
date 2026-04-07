@@ -1,0 +1,33 @@
+# Heterogeneity Analysis & Alternative Regression Plans
+
+This document outlines the detailed execution logic for exploring heterogeneous effects and correcting our econometric models to find statistically significant and interpretable capitalization results.
+
+## 1. Single-Way vs Two-Way Standard Error Clustering
+**Status:** In Progress
+- **Logic:** Two-way clustering (`~ zcta + border_dyad`) might be excessively punishing on the variance-covariance matrix, inflating our confidence intervals. 
+- **Execution:** We will run the baseline Full DiDC model with single-way clustering (`~ segment_id` or `~ zcta`) and present it alongside the original two-way clustered results for comparison.
+
+## 2. Timeframe Sub-sampling (Pre-COVID vs COVID Era)
+**Status:** In Progress
+- **Logic:** The COVID-19 housing market boom introduced intense structural breaks, fundamentally altering housing demand characteristics (e.g. rush for space rather than local amenities).
+- **Execution:** We will slice the `estimation_didc_panel.csv` into a Pre-COVID sample (2012-2019) and a COVID-era sample (2020-2026), testing the capitalization of higher education amenities dynamically. If preferences for amenities shifted, significant results may emerge in the pre-crisis era.
+
+## 3. Alternative Measures of Y & Housing Architectural Controls
+**Status:** Planned
+- **Logic:** Comparing median prices per square foot across a border assumes housing stock is identical. We need structural controls to prevent omitted variable bias.
+- **Execution (Data Pipeline Instructions):** 
+    1. Open the original Python `census` API querying script.
+    2. Add queries for structural variables from the ACS 5-Year Estimates profile: `B25017_001E` (Median Rooms), `B25035_001E` (Median Year Structure Built).
+    3. We could also query `B25077_001E` (Median Home Value) or `B25064_001E` (Median Gross Rent) as alternative dependent variables.
+    4. Re-run the data integration workflow (Tasks 1 & 2) to regenerate `estimation_didc_panel.csv`.
+    5. Fit the models incorporating these new `X_ict` confounders.
+
+## 4. Alternative Thresholds for Treatment Variable X
+**Status:** Planned
+- **Logic:** Consumers may only value large threshold differences rather than reacting continuously per $1,000 of tuition gap.
+- **Execution:** Discretize the `delta_in_state_tuition` gap into categorical bins or a binary indicator variable (e.g., $Gap > $5k). Use this indicator inside the DiDC interaction terms.
+
+## 5. Cross-Sectional Splitting (Urban vs. Rural)
+**Status:** Planned
+- **Logic:** Housing supply elasticity matters. In rural locations where new housing is easily built, price capitalization fails to materialize.
+- **Execution:** Categorize ZCTAs into Urban Core vs Rural segments based on population density, and estimate models separately on these distinct subsets.

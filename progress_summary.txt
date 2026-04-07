@@ -1,0 +1,21 @@
+Project Progress Summary
+
+1. Data Preparation:
+The project has successfully constructed a 448k-observation longitudinal panel at the ZCTA level, synthesizing ACS housing data, tax simulations (via TAXSIM), BEA macroeconomic factors, and BLS unemployment rates. The final dataset is structured for a spatial Difference-in-Discontinuities (DiDC) design.
+
+2. Econometric Estimations:
+The script `task_3.1b_econometric_estimation.R` has been developed and executed. It employs the `fixest` package to run four incremental models for tuition and institutional caliber gaps:
+- Naive OLS
+- Spatial RD
+- Base DiDC (with `segment_id^year` fixed effects)
+- Full DiDC (adding time-varying tax and macroeconomic covariates)
+Standard errors are two-way clustered by ZCTA and border dyad.
+
+3. Current Results & Challenges:
+As shown in `table_3_joint_didc.md`, the results are currently problematic for our hypothesis:
+- While basic models (Naive OLS and Spatial RD) yield statistically significant estimates for the Tuition Gap LATE, introducing fixed effects and local controls (Full DiDC) eliminates the significance.
+- In the Full DiDC joint model, the Tuition Gap LATE falls to -0.003 (p > 0.1) and the Caliber Gap LATE to 0.028 (p > 0.1).
+- Strong covariates like the Effective Property Tax Rate, Log Real GDP Per Capita, and Local Unemployment absorb most of the variance (R2 leaps to 0.819).
+- The two-way clustering of standard errors may also be overly conservative, widening confidence intervals.
+
+In short, the baseline effects of higher education tuition and caliber subsidies on housing prices (measured as ln_median_ppsf) are completely washed out by local economic structures and fixed effects. This necessitates further heterogeneity analysis and alternative model specifications to uncover underlying mechanisms.

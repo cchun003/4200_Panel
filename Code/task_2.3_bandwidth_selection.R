@@ -1,7 +1,6 @@
 # ==============================================================================
 # Task 2.3: Data-Driven MSE-Optimal Bandwidth Selection
 # ==============================================================================
-# Dependency: install.packages(c("tidyverse", "rdrobust"))
 library(tidyverse)
 library(rdrobust)
 
