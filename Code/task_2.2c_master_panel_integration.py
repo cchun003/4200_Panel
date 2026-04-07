@@ -67,8 +67,10 @@ for dyad in dyads:
                 'year': year,
                 'delta_in_state_tuition': pol_a['weighted_in_state'] - pol_b['weighted_in_state'],
                 'delta_out_of_state_tuition': pol_a['weighted_out_of_state'] - pol_b['weighted_out_of_state'],
+                'delta_top_20_caliber': pol_a['top_20'] - pol_b['top_20'],
                 'delta_top_50_caliber': pol_a['top_50'] - pol_b['top_50'],
-                'delta_top_100_caliber': pol_a['top_100'] - pol_b['top_100']
+                'delta_top_100_caliber': pol_a['top_100'] - pol_b['top_100'],
+                'delta_top_150_caliber': pol_a['top_150'] - pol_b['top_150']
             })
 
 dyad_policy_panel = pd.DataFrame(dyad_records)
