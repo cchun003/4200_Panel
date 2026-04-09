@@ -4,13 +4,18 @@
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{amssymb} % For checkmark
 \usepackage{tikz}
 \usepackage{threeparttable}
 \usepackage{xcolor}
 
-% Theme
+% Theme Configuration
 \usetheme{Boadilla}
 \usecolortheme{seahorse}
+
+% Clean up the footer (no title/author, just frame numbers)
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
 
 \title[Prestige vs. Price]{Prestige vs. Price: Spatial Capitalization of Higher Education at State Borders}
 \subtitle{Evidence from a Difference-in-Discontinuities Design (2012--2024)}
@@ -31,6 +36,21 @@
 
 \begin{frame}
     \titlepage
+\end{frame}
+
+\begin{frame}{Roadmap of Presentation}
+    \begin{itemize}
+        \item \textbf{Setup \& Hypotheses:} Framing the "Tuition Coast" vs "Prestige" spatial boundaries.
+        \item \textbf{Empirical Strategy:} Introducing the Spatial Difference-in-Discontinuities (DiDC) architecture.
+        \item \textbf{Data \& Curation:} NBER TAXSIM microsimulations and MSE-optimal bandwidth engineering.
+        \item \textbf{Results:} 
+        \begin{itemize}
+            \item Resolving the "Tuition Illusion".
+            \item The 9.8\% Top 50 Prestige Capitalization premium.
+        \end{itemize}
+        \item \textbf{Event Study Validation:} Confirming the Efficient Market Hypothesis with flat pre-trends.
+        \item \textbf{Caveats \& Conclusions.}
+    \end{itemize}
 \end{frame}
 
 \begin{frame}{Higher Education at the State Border}
@@ -67,42 +87,9 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Preview of Main Results}
-    \begin{enumerate}
-        \item \textbf{The "Tuition Illusion":} The financial cost of in-state tuition is \textbf{not} capitalized into housing once local property and income tax regimes are absorbed.
-        \item \textbf{The "Prestige Premium":} Access to a Top 50 public university yields a precisely estimated \textbf{9.8\% housing premium} immediately across the state line.
-        \item \textbf{Non-Linear Option Value:} Capitalization follows an inverse U-shape. The market ignores generic Top 100 schools (too broad), but violently values elite Top 50 option value.
-    \end{enumerate}
-\end{frame}
-
 % ---------------------------------------------------------
-% 2. Methodology
+% 2. Methodology (Moved Up for Flow)
 % ---------------------------------------------------------
-
-\begin{frame}{The Identification Challenge}
-    \begin{itemize}
-        \item \textbf{Naive OLS:} Biased by massive regional unobservables (e.g., Silicon Valley vs. Nevada deserts).
-        \item \textbf{Spatial Regression Discontinuity (RD):} Assumes unobservables change smoothly at the border. But states \textit{simultaneously} change property taxes, income taxes, and school quality exactly at the border. 
-        \item We cannot isolate the higher education effect using cross-sectional RD alone.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{The Spatial Engineering: Segmenting the Border}
-    \begin{itemize}
-        \item \textbf{The Naive OLS Problem:} Standard OLS compares a house in Silicon Valley to a house in the Nevada desert. 
-        \item \textbf{The Border Segment Solution:} We fracture the entire US state-border network into discrete, evenly distributed segments ($\approx$ 50km bands). 
-        \item We restrict comparisons \textit{strictly} to housing units that share the exact same microscopic border segment, effectively equalizing unobserved spatial characteristics like weather, regional highway access, and geographic macro shocks.
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Methodology: Bandwidth and MSE-Optimality}
-    \begin{itemize}
-        \item \textbf{How far from the border is valid?}
-        \item We compute data-driven, MSE-optimal geographic bandwidths ($h^*$) using Triangular Kernels (via \texttt{rdrobust}).
-        \item The optimization algorithm iterates segment-by-segment calculation, falling back to dyadic-level optimization if specific border segments are too rural (sparse density).
-        \item This rigorously filters the 2.7M initial dataset down to the 448k highly resilient geospatial estimation pool.
-    \end{itemize}
-\end{frame}
 
 \begin{frame}{The Spatial DiDC Architecture}
     \begin{block}{Econometric Specification}
@@ -119,7 +106,7 @@
 \end{frame}
 
 \begin{frame}{Visualizing Alphabetical Symmetry (CA vs AZ vs NV)}
-    \textbf{The Assignment Problem:} For any state dyad, which state is $S_i=1$? We arbitrarily sort alphabetically. The math behaves symmetrically.
+    \textbf{The Assignment Problem:} For any state dyad, which state is $S_i=1$? We arbitrarily sort alphabetically. The parameter math flawlessly absorbs the polarity.
     
     \begin{center}
     \begin{tikzpicture}[scale=0.8, every node/.style={transform shape}]
@@ -134,13 +121,13 @@
     \end{center}
     
     \begin{itemize}
-        \item \textbf{Proof of Validity:} If CA is control ($S_{AZ}=1$), the parameter $\Delta$ is negative ($-6$). If CA is treated ($S_{CA}=1$), $\Delta$ is positive ($+6$). 
-        \item The $S_i$ dummy interaction term perfectly absorbs the polarity, identifying the absolute spatial premium strictly derived from the amenity gap magnitude.
+        \item If CA is control ($S_{AZ}=1$), $\Delta = -6$. If CA is treated ($S_{CA}=1$), $\Delta = +6$. 
+        \item Unambiguously identifies the absolute spatial premium driven by amenity gaps.
     \end{itemize}
 \end{frame}
 
 % ---------------------------------------------------------
-% 3. Background \& Data
+% 3. Background / Data / Bandwidth
 % ---------------------------------------------------------
 
 \begin{frame}{Literature \& Value Added}
@@ -172,13 +159,22 @@
 
 \begin{frame}{Data Curation: NBER TAXSIM (The Tiebout Controls)}
     \begin{itemize}
-        \item \textbf{The Problem:} High-amenity states charge high taxes. Failing to control for tax shifts across the border poisons the tuition coefficient.
+        \item \textbf{The Problem:} High-amenity states charge high taxes. Failing to control for tax shifts across the border thoroughly poisons the tuition coefficient.
         \item \textbf{The Solution (NBER TAXSIM):}
         \begin{itemize}
             \item We simulated a standardized "Median Household" (\$100k income, married, 2 dependents).
             \item Fed this identical family through the tax code of all 50 states natively for every year.
             \item Isolated \textit{pure statutory tax liability variation} without endogeneity from actual local wage or employment differences.
         \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Methodology: Border Segmentation \& Bandwidth}
+    \begin{itemize}
+        \item \textbf{The Problem:} Comparing average state lines confounds climate and economy.  
+        \item \textbf{Segmentation:} We fracture the entire US state-border network into discrete, evenly distributed segments ($\approx$ 50km bands). 
+        \item \textbf{Bandwidth ($h^*$):} We compute data-driven, MSE-optimal geographic target bandwidths locally using Triangular Kernels (via \texttt{rdrobust}).
+        \item This forces comparisons strictly between immediate cross-state neighbors operating in identical macroeconomic geographies, generating our highly curated 448k estimation pool.
     \end{itemize}
 \end{frame}
 
@@ -226,11 +222,11 @@
                  & $(0.022)$ & $(0.013)$ \\
                 $\text{Effective Property Tax Rate}$ & & $-19.494^{***}$ \\
                  & & $(3.081)$ \\
-                $\text{State/Fed Income Taxes}$ & & Included \\
                 \midrule
-                Fixed Effects & None & $\text{Segment\_ID} \times \text{Year}$ \\
+                Income Tax / Macro Covariates &  & $\checkmark$ \\
+                Fixed Effects & None & $\text{Seg\_ID} \times \text{Year}$ \\
+                Standard Errors & Single C. & Two-Way C. \\
                 Observations & 196,632 & 128,420 \\
-                $R^2$ Adj. & 0.039 & 0.762 \\
                 \bottomrule
             \end{tabular}
         }
@@ -254,6 +250,7 @@
                 $\text{Tuition Gap LATE (\$1k)}$ & $-0.026^{***}$ & $-0.008$ \\
                  & $(0.009)$ & $(0.013)$ \\
                 \midrule
+                TAXSIM Covariates & & $\checkmark$ \\
                 Fixed Effects & $\text{Seg} \times \text{Year}$ & $\text{Seg} \times \text{Year}$ \\
                 Standard Errors & Two-Way C. & Two-Way C. \\
                 Observations & 135,402 & 128,420 \\
@@ -291,6 +288,21 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}{Event Study: Validation \& Market Efficiency}
+    \begin{columns}
+        \begin{column}{0.65\textwidth}
+            \includegraphics[height=0.75\textheight]{Output/event_study_3_binned.pdf}
+        \end{column}
+        \begin{column}{0.35\textwidth}
+            \textbf{Key Takeaways:}
+            \begin{itemize}
+                \item \textbf{Zero Pre-Trends:} Leads ($t<0$) firmly cross zero. Prevents reverse-causality.
+                \item \textbf{Efficient Market:} Capitalization forces resolve definitively at strictly $t=0$, fully reflecting option-value instantly upon US News release.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+\end{frame}
+
 % ---------------------------------------------------------
 % 5. Heterogeneity & Conclusion
 % ---------------------------------------------------------
@@ -317,11 +329,6 @@
 % Appendix
 % ---------------------------------------------------------
 \appendix
-\begin{frame}{Appendix: Event Study Validation Plan}
-    \begin{center}
-        \textit{[Placeholder: Event Study Parallel Trends Plot to be inserted here, establishing the strict validity of the DiDC temporal assumption]}
-    \end{center}
-\end{frame}
 
 \begin{frame}{Appendix A: Pure Price Elasticity Restriction}
     \begin{itemize}
@@ -338,12 +345,10 @@
                 \midrule
                 $\text{Tuition Gap LATE (\$1k)}$ & $-0.003$ & $-0.003$ \\
                  & $(0.005)$ & $(0.013)$ \\
-                $\text{Property Tax Rate}$ & $-20.096^{***}$ & $-20.096^{***}$ \\
-                 & $(2.349)$ & $(3.438)$ \\
                 \midrule
+                Covariates & $\checkmark$ & $\checkmark$ \\
                 Fixed Effects & $\text{Seg} \times \text{Year}$ & $\text{Seg} \times \text{Year}$ \\
                 Observations & 79,318 & 79,318 \\
-                $R^2$ Adj. & 0.832 & 0.832 \\
                 \bottomrule
             \end{tabular}
         }
@@ -368,9 +373,9 @@
                 $\text{Tuition Gap LATE (\$1k)}$ & $0.014$ & $0.014$ \\
                  & $(0.009)$ & $(0.024)$ \\
                 \midrule
+                Covariates & $\checkmark$ & $\checkmark$ \\
                 Fixed Effects & $\text{Seg} \times \text{Year}$ & $\text{Seg} \times \text{Year}$ \\
                 Observations & 36,936 & 36,936 \\
-                $R^2$ Adj. & 0.831 & 0.831 \\
                 \bottomrule
             \end{tabular}
         }
@@ -394,9 +399,9 @@
                 $\text{Tuition Gap LATE (\$1k)}$ & $-0.015$ & $-0.001$ \\
                  & $(0.015)$ & $(0.010)$ \\
                 \midrule
+                Covariates & $\checkmark$ & $\checkmark$ \\
                 Fixed Effects & $\text{Seg} \times \text{Year}$ & $\text{Seg} \times \text{Year}$ \\
                 Observations & 78,046 & 50,374 \\
-                $R^2$ Adj. & 0.773 & 0.833 \\
                 \bottomrule
             \end{tabular}
         }
