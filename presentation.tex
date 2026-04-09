@@ -14,8 +14,9 @@
 
 \title[Prestige vs. Price]{Prestige vs. Price: Spatial Capitalization of Higher Education at State Borders}
 \subtitle{Evidence from a Difference-in-Discontinuities Design (2012--2024)}
-\author[Group 3]{ECON4200-2M Group 3 Midterm Presentation}
-\date{Apr 2026}
+\author[Author Name]{Author Name}
+\institute[Institution]{Department of Economics}
+\date{\today}
 
 % Fix for hyperref warning regarding \translate in PDF strings
 \pdfstringdefDisableCommands{%
@@ -32,13 +33,13 @@
     \titlepage
 \end{frame}
 
-\begin{frame}{Higher Education at the Border}
+\begin{frame}{The Hook: Higher Education at the Border}
     \begin{itemize}
         \item State borders create sharp, discontinuous "cliffs" in university access.
-        \item Crossing a state line by 1 mile changes your access to:
+        \item Crossing a state line changes your access to:
         \begin{enumerate}
             \item \textbf{Financial Subsidies:} Tens of thousands of dollars in in-state tuition discounts.
-            \item \textbf{Prestige:} Access to elite, globally-ranked public flagship institutions.
+            \item \textbf{Prestige:} Potential access to elite, globally-ranked public flagship institutions.
         \end{enumerate}
         \item \textbf{Do households spatially sort to capture these benefits, and is this access capitalized into local housing markets?}
     \end{itemize}
@@ -190,22 +191,27 @@
 \begin{frame}{Summary Statistics (Estimation DiDC Panel)}
     \begin{table}
         \centering
-        \caption{ZCTA-Level Estimation Sample Properties (Bandwidth Filtered)}
+        \caption{ZCTA-Level Estimation Sample Properties (Filtered to Bandwidth)}
         \resizebox{0.8\textwidth}{!}{
             \begin{tabular}{lcccc}
                 \toprule
                 \textbf{Variable} & \textbf{Observations} & \textbf{Mean} & \textbf{Std. Dev.} \\
                 \midrule
-                $\text{Median Price Per SqFt (\$)}$ & 268,224 & 163.22 & 367.17 \\
-                $\text{Distance to Border } d_{ic} \text{ (km)}$ & 448,941 & 0.43 & 36.82 \\
-                $\Delta \text{In-State Tuition Gap (\$)}$ & 448,941 & -163.74 & 3390.95 \\
-                $\Delta \text{Top 50 Caliber Gap (Count)}$ & 344,411 & -0.11 & 0.88 \\
+                Median Price Per SqFt (\$) & 268,224 & 163.22 & 367.17 \\
+                Distance to Border $d_{ic}$ (km) & 448,941 & 0.43 & 36.82 \\
+                $\Delta$ In-State Tuition Gap (\$) & 448,941 & -163.74 & 3390.95 \\
+                $\Delta$ Top 50 Caliber Gap (Count) & 344,411 & -0.11 & 0.88 \\
+                Effective Property Tax Rate & 407,324 & 0.012 & 0.007 \\
+                Unemployment Rate (\%) & 444,795 & 5.071 & 2.174 \\
+                Real GDP Per Capita (\$) & 444,795 & 58,720 & 1,050,974 \\
+                TAXSIM Federal Income Tax (\$) & 419,176 & 198.88 & 6754.56 \\
+                TAXSIM State Income Tax (\$) & 419,176 & 1959.85 & 1924.20 \\
                 \bottomrule
             \end{tabular}
         }
     \end{table}
     \begin{itemize}
-        \item The dataset comprises only observations falling cleanly within the MSE-optimal geographic bandwidth surrounding state lines.
+        \item Taxes simulated for a \$100k median household; GDP and Unemployment captured at ZCTA-level.
     \end{itemize}
 \end{frame}
 

@@ -1,6 +1,6 @@
 # Fdb version 4
-["pdflatex"] 1775705382.38779 "/Users/chenchun/Desktop/ECON4200/4200_Panel/presentation.tex" "presentation.pdf" "presentation" 1775705386.54401 0
-  "/Users/chenchun/Desktop/ECON4200/4200_Panel/presentation.tex" 1775705362.04125 20046 05c9a8be2bef1aed6db749d08d52d250 ""
+["pdflatex"] 1775707100.7668 "/Users/chenchun/Desktop/ECON4200/4200_Panel/presentation.tex" "presentation.pdf" "presentation" 1775707104.64868 0
+  "/Users/chenchun/Desktop/ECON4200/4200_Panel/presentation.tex" 1775707100.39333 20105 b883fe5b5e03e565eb5f9d57d6732103 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1136849721 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/local/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/tcss0500.tfm" 1136768653 1536 60d93b2a4c4b97d3f95d298d025a3cac ""
@@ -220,10 +220,10 @@
   "/usr/local/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1759570771 5467155 19efa205003f9ecad95fbbaa6ff24da1 ""
   "/usr/local/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1759570594 3345729 a6b6707ba27bbfac7a799d4cb5311664 ""
   "/usr/local/texlive/2025/texmf.cnf" 1741450484 577 418a7058ec8e006d8704f60ecd22c938 ""
-  "presentation.aux" 1775705386.27642 3787 aa14310dbfe04058b0ac1375e0d77880 "pdflatex"
-  "presentation.nav" 1775705386.27968 2597 6efec8c412bf83e94adeb483467deb62 "pdflatex"
-  "presentation.out" 1775705386.27877 81 5bcea9cf7d2d9aece7cac4018e9f6c5b "pdflatex"
-  "presentation.tex" 1775705362.04125 20046 05c9a8be2bef1aed6db749d08d52d250 ""
+  "presentation.aux" 1775707104.41198 3787 aa14310dbfe04058b0ac1375e0d77880 "pdflatex"
+  "presentation.nav" 1775707104.41488 2597 6efec8c412bf83e94adeb483467deb62 "pdflatex"
+  "presentation.out" 1775707104.41408 81 5bcea9cf7d2d9aece7cac4018e9f6c5b "pdflatex"
+  "presentation.tex" 1775707100.39333 20105 b883fe5b5e03e565eb5f9d57d6732103 ""
   (generated)
   "presentation.aux"
   "presentation.log"
