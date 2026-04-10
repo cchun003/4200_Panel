@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.10.4)  10 APR 2026 11:06
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.10.4)  10 APR 2026 11:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1023,8 +1023,7 @@ thkerncmss.
 
 [9
 
-{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
-
+]
 
 [10
 
@@ -1032,7 +1031,8 @@ thkerncmss.
 
 [11
 
-]
+{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
+
 
 [12
 
@@ -1063,7 +1063,7 @@ LaTeX Font Info:    Font shape `OT1/cmss/b/n' in size <5> not available
 [16
 
 ]
-<Output/event_study_3_binned.pdf, id=173, 578.16pt x 361.35pt>
+<Output/event_study_3_binned.pdf, id=172, 578.16pt x 361.35pt>
 File: Output/event_study_3_binned.pdf Graphic file (type pdf)
 <use Output/event_study_3_binned.pdf>
 Package pdftex.def Info: Output/event_study_3_binned.pdf  used on input line 33
@@ -1087,16 +1087,30 @@ Overfull \hbox (10.70782pt too wide) in paragraph at lines 331--331
 [19
 
 ]
+<Output/rd_plot_prestige.pdf, id=200, 578.16pt x 433.62pt>
+File: Output/rd_plot_prestige.pdf Graphic file (type pdf)
+<use Output/rd_plot_prestige.pdf>
+Package pdftex.def Info: Output/rd_plot_prestige.pdf  used on input line 363.
+(pdftex.def)             Requested size: 369.96008pt x 277.46953pt.
+
+Overfull \vbox (123.46663pt too high) detected at line 363
+ []
+
+
 
 [20
 
-]
+ <./Output/rd_plot_prestige.pdf>]
 
 [21
 
 ]
 
 [22
+
+]
+
+[23
 
 ]
 \tf@nav=\write6
@@ -1117,10 +1131,10 @@ Package rerunfilecheck Info: File `presentation.out' has not changed.
 (rerunfilecheck)             Checksum: 5BCEA9CF7D2D9AECE7CAC4018E9F6C5B;81.
  ) 
 Here is how much of TeX's memory you used:
- 25201 strings out of 473190
- 503172 string characters out of 5715800
- 859063 words of memory out of 5000000
- 47897 multiletter control sequences out of 15000+600000
+ 25210 strings out of 473190
+ 503452 string characters out of 5715800
+ 858063 words of memory out of 5000000
+ 47904 multiletter control sequences out of 15000+600000
  570879 words of font info for 78 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,16n,123p,387b,737s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1143,10 +1157,10 @@ ive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/
 texlive/2025/texmf-dist/fonts/type1/public/amsfonts/symbols/msam5.pfb></usr/loc
 al/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfss0900.pfb></usr/local
 /texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfss1000.pfb>
-Output written on presentation.pdf (22 pages, 232735 bytes).
+Output written on presentation.pdf (23 pages, 309527 bytes).
 PDF statistics:
- 313 PDF objects out of 1000 (max. 8388607)
- 212 compressed objects within 3 object streams
- 46 named destinations out of 1000 (max. 500000)
- 212 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 324 PDF objects out of 1000 (max. 8388607)
+ 220 compressed objects within 3 object streams
+ 48 named destinations out of 1000 (max. 500000)
+ 217 words of extra memory for PDF output out of 10000 (max. 10000000)
 
