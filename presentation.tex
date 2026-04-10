@@ -38,25 +38,26 @@
     \titlepage
 \end{frame}
 
-\begin{frame}{Roadmap of Presentation}
+\begin{frame}{Roadmap}
     \begin{itemize}
-        \item \textbf{Setup \& Hypotheses:} Framing the "Tuition Coast" vs "Prestige" spatial boundaries.
-        \item \textbf{Empirical Strategy:} Introducing the Spatial Difference-in-Discontinuities (DiDC) architecture.
-        \item \textbf{Data \& Curation:} NBER TAXSIM microsimulations and MSE-optimal bandwidth engineering.
+        \item \textbf{Setup \& Hypotheses:} Spatial boundaries of public university tuition and caliber at state borders.
+        \item \textbf{Empirical Strategy:} The Spatial Difference-in-Discontinuities (DiDC) method.
+        \item \textbf{Data \& Curation:} NBER TAXSIM microsimulations and MSE-optimal bandwidth selection.
         \item \textbf{Results:} 
         \begin{itemize}
-            \item Resolving the "Tuition Illusion".
-            \item The 9.8\% Top 50 Prestige Capitalization premium.
+            \item Baseline
+            \item Heterogeneity
+            \item Robustness
         \end{itemize}
-        \item \textbf{Event Study Validation:} Confirming the Efficient Market Hypothesis with flat pre-trends.
-        \item \textbf{Caveats \& Conclusions.}
+        \item \textbf{Future steps}
+        \item \textbf{Conclusion}
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Higher Education at the State Border}
+\begin{frame}{Background: Higher Education at the State Border}
     \begin{itemize}
         \item State borders create sharp, discontinuous "cliffs" in university access.
-        \item Crossing a state line changes your access to:
+        \item Crossing a state line changes one's access to:
         \begin{enumerate}
             \item \textbf{Financial Subsidies:} Tens of thousands of dollars in in-state tuition discounts.
             \item \textbf{Prestige:} Potential access to elite, nationally-renowned public flagship institutions. In-state applicants generally have higher acceptance rates.
@@ -87,25 +88,37 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}{Literature \& Contribution}
+    \begin{itemize}
+        \item \textbf{Tiebout Sorting (1956) \& School Capitalization:} Black (1999) proves housing markets capitalize local K-12 school quality at attendance boundaries.
+        \item \textbf{The Gap:} We know little about whether families sort at the \textit{state level} for higher education.
+        \item \textbf{Contribution:} 
+        \begin{itemize}
+            \item Extends Tiebout sorting from K-12 to the higher-education market.
+            \item Overcomes policy endogeneity typical of macro-state comparisons by using a high-resolution Spatial Difference-in-Discontinuities (DiDC) estimator across 448k estimation observations.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
 % ---------------------------------------------------------
 % 2. Methodology (Moved Up for Flow)
 % ---------------------------------------------------------
 
-\begin{frame}{The Spatial DiDC Architecture}
+\begin{frame}{Empirical Strategy: Spatial DiDC}
     \begin{block}{Econometric Specification}
-    $$ \ln(P_{zt}) = \beta (S_i \times \Delta \text{Policy}_{st}) + \gamma X_{zt} + \alpha_{sy} + \epsilon_{zt} $$
+    $$ \ln(P_{zt}) = \beta (S_i \times \Delta \text{Edu}_{st}) + \gamma X_{zt} + \alpha_{sy} + \epsilon_{zt} $$
     \end{block}
     
     \begin{itemize}
         \item $S_i$: Spatial dummy (1 if Treated Side, 0 if Control Side).
-        \item $\Delta \text{Policy}_{st}$: The dyadic gap in Tuition or Caliber.
+        \item $\Delta \text{Edu}_{st}$: The dyadic gap in Tuition or Caliber.
+        \item $\gamma X_{zt}$: Time-varying controls (Federal \& state income tax, property taxes, local GDP, unemployment).
         \item $\alpha_{sy}$: \textbf{Border-Segment-by-Year Fixed Effects}. Absorbs all cross-border temporal and unobserved spatial shocks specific to that exact junction.
-        \item $\gamma X_{zt}$: Time-varying controls (TAXSIM liabilities, Property Taxes, local GDP).
         \item \textbf{Two-Way Clustered Standard Errors} (ZCTA and Border Dyad).
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Visualizing Alphabetical Symmetry (CA vs AZ vs NV)}
+\begin{frame}{Spatial Dummy Assignment}
     \textbf{The Assignment Problem:} For any state dyad, which state is $S_i=1$? We arbitrarily sort alphabetically. The parameter math flawlessly absorbs the polarity.
     
     \begin{center}
@@ -114,35 +127,44 @@
         \node[draw, circle, fill=blue!20, minimum size=1.5cm] (AZ) at (4, 2) {AZ (0)};
         \node[draw, circle, fill=green!20, minimum size=1.5cm] (NV) at (4, -2) {NV (0)};
         
-        \draw[<->, thick] (CA) -- node[above, sloped] {\textbf{AZ vs CA}: $\Delta = 0-6 = -6$} (AZ);
-        \draw[<->, thick] (CA) -- node[below, sloped] {\textbf{CA vs NV}: $\Delta = 6-0 = +6$} (NV);
-        \draw[<->, thick] (AZ) -- node[right] {\textbf{AZ vs NV}: $\Delta = 0-0 = 0$} (NV);
+        \draw[<->, thick] (CA) -- node[above, sloped] {\textbf{AZ vs CA}: $\Delta = -6$} (AZ);
+        \draw[<->, thick] (CA) -- node[below, sloped] {\textbf{CA vs NV}: $\Delta = 6$} (NV);
+        \draw[<->, thick] (AZ) -- node[right] {\textbf{AZ vs NV}: $\Delta = 0$} (NV);
     \end{tikzpicture}
     \end{center}
     
     \begin{itemize}
         \item If CA is control ($S_{AZ}=1$), $\Delta = -6$. If CA is treated ($S_{CA}=1$), $\Delta = +6$. 
-        \item Unambiguously identifies the absolute spatial premium driven by amenity gaps.
+        \item Switching the dummy assignment does not affect the $\beta$ coefficient.
     \end{itemize}
 \end{frame}
 
-% ---------------------------------------------------------
-% 3. Background / Data / Bandwidth
-% ---------------------------------------------------------
-
-\begin{frame}{Literature \& Value Added}
-    \begin{itemize}
-        \item \textbf{Tiebout Sorting (1956) \& School Capitalization:} Black (1999) proves housing markets capitalize local K-12 school quality at attendance boundaries.
-        \item \textbf{The Gap:} We know little about whether families sort at the \textit{macro-state level} for higher education.
-        \item \textbf{Value Added:} 
-        \begin{itemize}
-            \item Extends Tiebout sorting from K-12 to the higher-education market.
-            \item Overcomes policy endogeneity typical of macro-state comparisons by using a high-resolution Spatial Difference-in-Discontinuities (DiDC) estimator across 448k estimation observations.
-        \end{itemize}
-    \end{itemize}
+\begin{frame}{Data Sources \& Variable Construction}
+    \begin{table}
+        \centering
+        \caption{Summary of Final Estimation Panel (2012--2024)}
+        \resizebox{0.95\textwidth}{!}{
+            \begin{tabular}{lll}
+                \toprule
+                \textbf{Variable Category} & \textbf{Data Source} & \textbf{Specific Variable Construction} \\
+                \midrule
+                Housing Costs & \textbf{Redfin} & Median Price Per SqFt (ZCTA level) \\
+                Tuition & \textbf{IPEDS} & In-State Tuition weighted by enrollment \\
+                Institution Caliber & \textbf{U.S. News} & Historical Ranking (Top 150 available) \\
+                Income Tax & \textbf{NBER TAXSIM} & Simulated Federal \& State Liability\\
+                Macro Controls & \textbf{BEA, BLS} & County/ZCTA Real GDP and Unemployment \\
+                Local Policy & \textbf{ACS / TAXSIM} & Effective Property Tax Rates \\
+                \bottomrule
+            \end{tabular}
+        }
+    \end{table}
 \end{frame}
 
-\begin{frame}{Data Curation: Housing \& Education Policy}
+% ---------------------------------------------------------
+% 3. Data / Bandwidth
+% ---------------------------------------------------------
+
+\begin{frame}{Data Curation: Housing \& Education}
     \textbf{1. Housing Outcomes (2012--2024)}
     \begin{itemize}
         \item ZCTA-level panel from Redfin (Median Price per Square Foot).
@@ -152,29 +174,34 @@
     \vspace{0.3cm}
     \textbf{2. Higher Education Policy}
     \begin{itemize}
-        \item \textbf{Financial:} IPEDS panel for weighted state tuition averages.
-        \item \textbf{Prestige:} U.S. News \& World Report historical rankings, algorithmically binned into Top 20, Top 50, and Top 100 state flagship caliber indicators.
+        \item \textbf{Financial:} IPEDS panel for in-state tuition weighted by enrollment.
+        \item \textbf{Prestige:} U.S. News historical rankings, binned into Top 20, Top 50, and Top 100 state flagship caliber indicators.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Data Curation: NBER TAXSIM (The Tiebout Controls)}
+\begin{frame}{Data Curation: NBER TAXSIM}
     \begin{itemize}
         \item \textbf{The Problem:} High-amenity states charge high taxes. Failing to control for tax shifts across the border thoroughly poisons the tuition coefficient.
         \item \textbf{The Solution (NBER TAXSIM):}
         \begin{itemize}
             \item We simulated a standardized "Median Household" (\$100k income, married, 2 dependents).
             \item Fed this identical family through the tax code of all 50 states natively for every year.
-            \item Isolated \textit{pure statutory tax liability variation} without endogeneity from actual local wage or employment differences.
+            \item Isolated pure statutory tax liability variation without endogeneity from actual local wage or employment differences.
         \end{itemize}
     \end{itemize}
 \end{frame}
 
 \begin{frame}{Methodology: Border Segmentation \& Bandwidth}
     \begin{itemize}
-        \item \textbf{The Problem:} Comparing average state lines confounds climate and economy.  
-        \item \textbf{Segmentation:} We fracture the entire US state-border network into discrete, evenly distributed segments ($\approx$ 50km bands). 
+        \item \textbf{The Problem:} Comparing across entire state borders confounds climate and economy.  
+        \item \textbf{Segmentation:} We fracture the US state-border network into discrete, evenly distributed segments ($\approx$ 50km bands). 
         \item \textbf{Bandwidth ($h^*$):} We compute data-driven, MSE-optimal geographic target bandwidths locally using Triangular Kernels (via \texttt{rdrobust}).
-        \item This forces comparisons strictly between immediate cross-state neighbors operating in identical macroeconomic geographies, generating our highly curated 448k estimation pool.
+        \begin{itemize}
+            \item \textbf{Efficiency:} Filters 2.7M raw observations down to a 448k estimation sample (16\% retention).
+            \item \textbf{Mean Bandwidth:} $h^* \approx 63.33$ km.
+            \item \textbf{Failsafe:} Global fallback of 50km applied to sparse rural segments to ensure spatial completeness.
+        \end{itemize}
+        \item This forces comparisons strictly between immediate cross-state neighbors operating in identical macroeconomic geographies.
     \end{itemize}
 \end{frame}
 
