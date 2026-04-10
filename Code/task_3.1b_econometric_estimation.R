@@ -1,9 +1,8 @@
-# ==============================================================================
-# Task 3: Econometric Regression Estimation (DiDC Framework)
-# ==============================================================================
+# Dependency: install.packages(c("tidyverse", "fixest", "modelsummary", "rdrobust"))
 library(tidyverse)
 library(fixest)
 library(modelsummary)
+library(rdrobust)
 
 cat("Loading and configuring the estimation panel...\n")
 args <- commandArgs(trailingOnly = FALSE)
@@ -109,4 +108,19 @@ table_3_df <- modelsummary(
 )
 writeLines(knitr::kable(table_3_df[, -1], format = "markdown"), file.path(output_dir, "table_3_joint_didc.md"))
 
-cat(sprintf("Task 3.1b Complete. Markdown tables exported to %s.\n", output_dir))
+# ==============================================================================
+# Step 4: RD Plot Generation for Prestige
+# ==============================================================================
+cat("\nGenerating RD Plots for Prestige Discontinuity...\n")
+
+# Filter for segments where a Top 50 Caliber gap exists
+prestige_signal <- df |> filter(abs(delta_top_50_caliber) > 0)
+
+pdf(file.path(output_dir, "rd_plot_prestige.pdf"), width = 8, height = 6)
+rdplot(y = prestige_signal$ln_median_ppsf, x = prestige_signal$d_ic, c = 0,
+       kernel = "triangular", 
+       title = "Local Discontinuity: House Price vs. Top 50 Prestige Access",
+       y.label = "log(Price Per SqFt)", x.label = "Distance to Border (km)")
+dev.off()
+
+cat(sprintf("\nTask 3.1b Complete. Tables and Prestige RD Plot exported to %s.\n", output_dir))

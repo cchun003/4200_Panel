@@ -33,3 +33,7 @@
 ### het_table_5_pure_price.md
 **Caption:** Table 7 (Het): Pure Price Elasticity (Constant Top 50 Caliber)
 **Description:** This cuts the sample strictly to cross-border dyads where adjacent states provide identical access to Top 50 universities (Caliber Gap = 0). This completely neutralizes prestige option value from the model, directly estimating the isolated elasticity of the housing market strictly to the financial tuition cost of the borderline.
+
+### rd_plot_prestige.pdf
+**Caption:** Figure 2: Regression Discontinuity Identification (Prestige Gap Capitalization)
+**Description:** Visual validation of the 9.8% prestige premium using binned scatter plots. The plot highlights houses on either side of the state border, specifically for segments where adjacent states provide different access to Top 50 universities. The high-order polynomial fit reveals a clear, structural discontinuity in the price surface at the border, confirming that households are willing to pay significant premiums for resident access to elite public flagship institutions.
