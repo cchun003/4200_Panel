@@ -62,16 +62,19 @@ for dyad in dyads:
             
             # Compute Deltas strictly as (State A - State B)
             # State A corresponds to S_i = 1 (the 'treated' side in the alphabetic pair)
-            dyad_records.append({
+            record = {
                 'border_dyad': dyad,
                 'year': year,
                 'delta_in_state_tuition': pol_a['weighted_in_state'] - pol_b['weighted_in_state'],
                 'delta_out_of_state_tuition': pol_a['weighted_out_of_state'] - pol_b['weighted_out_of_state'],
-                'delta_top_20_caliber': pol_a['top_20'] - pol_b['top_20'],
-                'delta_top_50_caliber': pol_a['top_50'] - pol_b['top_50'],
-                'delta_top_100_caliber': pol_a['top_100'] - pol_b['top_100'],
-                'delta_top_150_caliber': pol_a['top_150'] - pol_b['top_150']
-            })
+            }
+            
+            # Dynamically calculate all caliber deltas (top_10, top_20, ..., top_150)
+            caliber_cols = [c for c in usnews_df.columns if c.startswith('top_')]
+            for col in caliber_cols:
+                record[f'delta_{col}_caliber'] = pol_a[col] - pol_b[col]
+                
+            dyad_records.append(record)
 
 dyad_policy_panel = pd.DataFrame(dyad_records)
 

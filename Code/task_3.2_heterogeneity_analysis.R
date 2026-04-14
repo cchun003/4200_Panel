@@ -95,25 +95,44 @@ names(table_tax)[4:5] <- c("Tax Cliff (Single)", "Tax Cliff (Two-Way)")
 writeLines(knitr::kable(table_tax[, -1], format = "markdown"), file.path(output_dir, "het_table_3_tax_cliff.md"))
 
 # ==============================================================================
-# 3. Caliber Tiers (Top 20 vs Top 50 vs Top 100)
+# 3. Caliber Tiers (Top 10 through Top 150)
 # ==============================================================================
-cat("\nRunning Caliber Tiers (Top 20 vs Top 50 vs Top 100)...\n")
+cat("\nRunning Caliber Tiers (Top 10 through Top 150)...\n")
 
-policy_formula_100 <- "delta_in_state_tuition + delta_top_100_caliber"
-f_didc_100 <- paste("ln_median_ppsf_acad ~ d_ic * S_i * (", policy_formula_100, ") +", covariates, "| segment_id^year")
+tier_models <- list()
+tiers <- seq(10, 150, 10)
 
-policy_formula_20 <- "delta_in_state_tuition + delta_top_20_caliber"
-f_didc_20 <- paste("ln_median_ppsf_acad ~ d_ic * S_i * (", policy_formula_20, ") +", covariates, "| segment_id^year")
+# Expand coef_map for all tiers
+new_coef_map <- c(
+  "S_i:delta_in_state_tuition" = "Tuition Gap LATE",
+  setNames(paste0("Caliber (Top ", tiers, ") Gap LATE"), paste0("S_i:delta_top_", tiers, "_caliber")),
+  "Effective_Property_Tax_Rate" = "Effective Property Tax Rate",
+  "siitax" = "State Income Tax",
+  "fiitax" = "Federal Income Tax",
+  "ln_real_gdp_pc" = "Log Real GDP Per Capita",
+  "Unemployment_Rate_ZCTA" = "Local Unemployment Rate"
+)
 
-m_tier_100 <- run_both_clusters(f_didc_100, df)
-m_tier_50 <- run_both_clusters(f_didc_full, df)
-m_tier_20 <- run_both_clusters(f_didc_20, df)
+for (t in tiers) {
+  policy_formula <- paste0("delta_in_state_tuition + delta_top_", t, "_caliber")
+  f_didc <- paste0("ln_median_ppsf_acad ~ d_ic * S_i * (", policy_formula, ") + ", covariates, " | segment_id^year")
+  
+  cat(sprintf("   - Estimating Top %d Tier...\n", t))
+  m_pair <- run_both_clusters(f_didc, df)
+  
+  # Name the models for modelsummary
+  tier_models[[paste0("T", t, "_S")]] <- m_pair$Single
+  tier_models[[paste0("T", t, "_TW")]] <- m_pair$`Two-Way`
+}
 
 table_tiers <- modelsummary(
-  c(m_tier_100, m_tier_50, m_tier_20), output = "data.frame", coef_map = coef_map, stars = stars, gof_map = gof_map,
-  title = "Caliber Option Value Tiers (Top 100 vs Top 50 vs Top 20)"
+  tier_models, output = "data.frame", coef_map = new_coef_map, stars = stars, gof_map = gof_map,
+  title = "Caliber Option Value Tiers (Top 10 to Top 150)"
 )
-names(table_tiers)[4:9] <- c("Top 100 (Single)", "Top 100 (Two-Way)", "Top 50 (Single)", "Top 50 (Two-Way)", "Top 20 (Single)", "Top 20 (Two-Way)")
+
+# Rename columns to be more readable
+names(table_tiers)[4:ncol(table_tiers)] <- unlist(lapply(tiers, function(t) c(paste0("Top ", t, " (S)"), paste0("Top ", t, " (TW)"))))
+
 writeLines(knitr::kable(table_tiers[, -1], format = "markdown"), file.path(output_dir, "het_table_4_caliber_tiers.md"))
 
 # ==============================================================================
