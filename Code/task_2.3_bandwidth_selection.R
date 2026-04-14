@@ -14,10 +14,6 @@ min_obs_per_side <- 15 # Minimum threshold to attempt segment-level rdrobust
 cat("Loading master spatial panel...\n")
 master_df <- read_csv(input_file, show_col_types = FALSE)
 
-# Generate target outcome: Natural log of Median Home Value
-master_df <- master_df |>
-  mutate(ln_median_home_value = log(Median_Home_Value))
-
 # ==============================================================================
 # Step 1: Isolate Baseline Year for Optimal h* Calculation
 # ==============================================================================
@@ -25,14 +21,14 @@ cat(sprintf("Filtering data to baseline year (%d)...\n", baseline_year))
 
 baseline_df <- master_df |>
   filter(year == baseline_year) |>
-  filter(!is.na(ln_median_home_value) & !is.na(d_ic))
+  filter(!is.na(ln_median_ppsf_acad) & !is.na(d_ic))
 
 # Calculate a global bandwidth as an absolute last-resort fallback
 cat("Calculating global optimal bandwidth as failsafe...\n")
 global_rd <- tryCatch(
   {
     rdbwselect(
-      y = baseline_df$ln_median_home_value,
+      y = baseline_df$ln_median_ppsf_acad,
       x = baseline_df$d_ic,
       c = 0, p = 1, kernel = "triangular", masspoints = "adjust"
     )
@@ -69,7 +65,7 @@ for (dyad_name in dyads) {
   dyad_h_star <- tryCatch(
     {
       rd_out <- rdbwselect(
-        y = dyad_data$ln_median_home_value,
+        y = dyad_data$ln_median_ppsf_acad,
         x = dyad_data$d_ic,
         c = 0, p = 1, kernel = "triangular", masspoints = "adjust"
       )
@@ -98,7 +94,7 @@ for (dyad_name in dyads) {
       seg_h_star <- tryCatch(
         {
           rd_out <- rdbwselect(
-            y = seg_data$ln_median_home_value,
+            y = seg_data$ln_median_ppsf_acad,
             x = seg_data$d_ic,
             c = 0, p = 1, kernel = "triangular", masspoints = "adjust"
           )

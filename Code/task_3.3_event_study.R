@@ -169,3 +169,47 @@ p_bin <- ggplot(plot_data_bin, aes(x = time, y = estimate)) +
 ggsave(file.path(proj_root, "Output", "event_study_3_binned.pdf"), plot = p_bin, width = 8, height = 5, bg="white")
 cat(sprintf("\nSaved: %s\n", file.path(proj_root, "Output", "event_study_3_binned.pdf")))
 
+# -------------------------------------------------------------
+# ACADEMIC CALENDAR MODELS (ln_median_ppsf_acad)
+# -------------------------------------------------------------
+form_baseline_acad <- as.formula(paste("ln_median_ppsf_acad ~ S_i * F3_top50 + S_i * F2_top50 + S_i * F1_top50 + S_i * delta_top_50_caliber + S_i * L1_top50 + S_i * L2_top50 + S_i * L3_top50 +", covariates, "| segment_id^year"))
+
+cat("\nRunning Baseline Model (Academic Calendar)...\n")
+m_base_acad <- feols(form_baseline_acad, data = df_full, cluster = ~ zcta + border_dyad)
+plot_es(broom::tidy(m_base_acad, conf.int=T), "Event Study 1b: Baseline (Academic Calendar)", "event_study_1b_baseline_acad.pdf", 3)
+
+form_binned_acad <- as.formula(paste("ln_median_ppsf_acad ~ S_i * F3_top50 + S_i * F2_top50 + S_i * F1_top50 + S_i * delta_top_50_caliber + S_i * L1_top50 +", covariates, "| segment_id^year"))
+
+cat("\nRunning Binned Model (Academic Calendar)...\n")
+m_bin_acad <- feols(form_binned_acad, data = df_curated, cluster = ~ zcta + border_dyad)
+
+res_bin_acad <- broom::tidy(m_bin_acad, conf.int=T, conf.level=0.95)
+plot_data_bin_acad <- res_bin_acad |>
+  filter(grepl("S_i:F|S_i:L|S_i:delta_top_50", term)) |>
+  mutate(
+    time = case_when(
+      grepl("F3", term) ~ -3,
+      grepl("F2", term) ~ -2,
+      grepl("F1", term) ~ -1,
+      grepl("delta_top_50", term) ~ 0,
+      grepl("L1", term) ~ 1
+    )
+  ) |>
+  arrange(time)
+
+p_bin_acad <- ggplot(plot_data_bin_acad, aes(x = time, y = estimate)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red", alpha = 0.6) +
+  geom_vline(xintercept = -0.5, linetype = "dashed", color = "gray50") +
+  geom_point(size = 3, color = "#2ca02c") +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high), width = 0.2, color = "#2ca02c", size = 0.8) +
+  theme_minimal(base_size = 14) +
+  labs(
+    title = "Event Study 3b: Binned (Academic Calendar)",
+    x = "Years Relative to Policy Shift (Binned post t=1)",
+    y = "Spatial LATE Housing Premium"
+  ) +
+  scale_x_continuous(breaks = -3:1, labels=c("t-3", "t-2", "t-1", "t=0", "t=1+")) +
+  theme(plot.title = element_text(face = "bold", size=12), panel.grid.minor = element_blank())
+
+ggsave(file.path(proj_root, "Output", "event_study_3b_binned_acad.pdf"), plot = p_bin_acad, width = 8, height = 5, bg="white")
+cat(sprintf("\nSaved: %s\n", file.path(proj_root, "Output", "event_study_3b_binned_acad.pdf")))

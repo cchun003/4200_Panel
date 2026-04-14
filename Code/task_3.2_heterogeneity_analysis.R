@@ -61,7 +61,7 @@ gof_map <- c("nobs", "r.squared", "FE: segment_id^year")
 stars <- c("*" = .1, "**" = .05, "***" = .01)
 
 policy_formula_50 <- "delta_in_state_tuition + delta_top_50_caliber"
-f_didc_full <- paste("ln_median_ppsf ~ d_ic * S_i * (", policy_formula_50, ") +", covariates, "| segment_id^year")
+f_didc_full <- paste("ln_median_ppsf_acad ~ d_ic * S_i * (", policy_formula_50, ") +", covariates, "| segment_id^year")
 
 # ==============================================================================
 # 1. Timeframe Sub-sampling
@@ -100,10 +100,10 @@ writeLines(knitr::kable(table_tax[, -1], format = "markdown"), file.path(output_
 cat("\nRunning Caliber Tiers (Top 20 vs Top 50 vs Top 100)...\n")
 
 policy_formula_100 <- "delta_in_state_tuition + delta_top_100_caliber"
-f_didc_100 <- paste("ln_median_ppsf ~ d_ic * S_i * (", policy_formula_100, ") +", covariates, "| segment_id^year")
+f_didc_100 <- paste("ln_median_ppsf_acad ~ d_ic * S_i * (", policy_formula_100, ") +", covariates, "| segment_id^year")
 
 policy_formula_20 <- "delta_in_state_tuition + delta_top_20_caliber"
-f_didc_20 <- paste("ln_median_ppsf ~ d_ic * S_i * (", policy_formula_20, ") +", covariates, "| segment_id^year")
+f_didc_20 <- paste("ln_median_ppsf_acad ~ d_ic * S_i * (", policy_formula_20, ") +", covariates, "| segment_id^year")
 
 m_tier_100 <- run_both_clusters(f_didc_100, df)
 m_tier_50 <- run_both_clusters(f_didc_full, df)
@@ -122,7 +122,7 @@ writeLines(knitr::kable(table_tiers[, -1], format = "markdown"), file.path(outpu
 cat("\nRunning Pure Price Elasticity (Same Caliber)...\n")
 df_pure_price <- df |> filter(delta_top_50_caliber == 0)
 policy_formula_pure <- "delta_in_state_tuition"
-f_didc_pure <- paste("ln_median_ppsf ~ d_ic * S_i * (", policy_formula_pure, ") +", covariates, "| segment_id^year")
+f_didc_pure <- paste("ln_median_ppsf_acad ~ d_ic * S_i * (", policy_formula_pure, ") +", covariates, "| segment_id^year")
 
 m_pure <- run_both_clusters(f_didc_pure, df_pure_price)
 table_pure <- modelsummary(
