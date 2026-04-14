@@ -32,13 +32,12 @@ df_long['rank'] = pd.to_numeric(df_long['rank'], errors='coerce')
 df_long = df_long.dropna(subset=['rank'])
 
 # Define state-year groupings
-# Count number of public universities in Top 20, 50, 100, 150
-df_caliber = df_long.groupby(['stabbr', 'year']).apply(lambda x: pd.Series({
-    'top_20': (x['rank'] <= 20).sum(),
-    'top_50': (x['rank'] <= 50).sum(),
-    'top_100': (x['rank'] <= 100).sum(),
-    'top_150': (x['rank'] <= 150).sum()
-})).reset_index()
+# Count number of public universities in Top 10th percentile brackets (10, 20, ..., 150)
+def calculate_tiers(x):
+    thresholds = range(10, 160, 10)
+    return pd.Series({f'top_{t}': (x['rank'] <= t).sum() for t in thresholds})
+
+df_caliber = df_long.groupby(['stabbr', 'year']).apply(calculate_tiers).reset_index()
 
 # Forward-fill 2024 results to 2025 and 2026 (for the full longitudinal study period)
 df_2024 = df_caliber[df_caliber['year'] == '2024']

@@ -115,6 +115,8 @@ master_df['interaction_caliber'] = master_df['S_i'] * master_df['delta_top_100_c
 # Handling potential NULLs/Zeros in housing prices and GDP pc
 master_df['ln_median_ppsf'] = np.log(master_df['MEDIAN_PPSF'].replace({0: np.nan}))
 master_df['ln_median_sale_price'] = np.log(master_df['MEDIAN_SALE_PRICE'].replace({0: np.nan}))
+master_df['ln_median_ppsf_acad'] = np.log(master_df['MEDIAN_PPSF_acad'].replace({0: np.nan}))
+master_df['ln_median_sale_price_acad'] = np.log(master_df['MEDIAN_SALE_PRICE_acad'].replace({0: np.nan}))
 master_df['ln_real_gdp_pc'] = np.log(master_df['Real_GDP_per_capita_ZCTA'] + 1)
 
 # Ensure clean panel structure (hierarchical sorting)

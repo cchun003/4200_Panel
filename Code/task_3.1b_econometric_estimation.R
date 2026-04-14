@@ -42,23 +42,25 @@ covariates <- paste0(
 )
 
 estimate_models <- function(policy_formula, model_name_prefix) {
-  f_ols <- as.formula(paste("ln_median_ppsf ~ S_i * (", policy_formula, ")"))
-  m_ols <- feols(f_ols, data = df, cluster = ~ zcta + border_dyad)
-
+  # Natural Calendar (Jan-Dec) Models
   f_rd <- as.formula(paste("ln_median_ppsf ~ d_ic * S_i * (", policy_formula, ")"))
   m_rd <- feols(f_rd, data = df, cluster = ~ zcta + border_dyad)
-
-  f_didc_base <- as.formula(paste("ln_median_ppsf ~ d_ic * S_i * (", policy_formula, ") | segment_id^year"))
-  m_didc_base <- feols(f_didc_base, data = df, cluster = ~ zcta + border_dyad)
 
   f_didc_full <- as.formula(paste("ln_median_ppsf ~ d_ic * S_i * (", policy_formula, ") +", covariates, "| segment_id^year"))
   m_didc_full <- feols(f_didc_full, data = df, cluster = ~ zcta + border_dyad)
 
+  # Academic Calendar (Sept-Aug) Models
+  f_rd_acad <- as.formula(paste("ln_median_ppsf_acad ~ d_ic * S_i * (", policy_formula, ")"))
+  m_rd_acad <- feols(f_rd_acad, data = df, cluster = ~ zcta + border_dyad)
+
+  f_didc_full_acad <- as.formula(paste("ln_median_ppsf_acad ~ d_ic * S_i * (", policy_formula, ") +", covariates, "| segment_id^year"))
+  m_didc_full_acad <- feols(f_didc_full_acad, data = df, cluster = ~ zcta + border_dyad)
+
   res <- list()
-  res[[paste0(model_name_prefix, " 1: Naive OLS")]] <- m_ols
-  res[[paste0(model_name_prefix, " 2: Spatial RD")]] <- m_rd
-  res[[paste0(model_name_prefix, " 3: Base DiDC")]] <- m_didc_base
-  res[[paste0(model_name_prefix, " 4: Full DiDC")]] <- m_didc_full
+  res[[paste0(model_name_prefix, " Natural (RD)")]] <- m_rd
+  res[[paste0(model_name_prefix, " Natural (DiDC)")]] <- m_didc_full
+  res[[paste0(model_name_prefix, " Acad (RD)")]] <- m_rd_acad
+  res[[paste0(model_name_prefix, " Acad (DiDC)")]] <- m_didc_full_acad
   res
 }
 
@@ -69,8 +71,8 @@ models_joint <- estimate_models("delta_in_state_tuition + delta_top_50_caliber",
 
 all_models <- c(models_tuition, models_caliber, models_joint)
 
-cat("\nChecking collinearity for the Full Joint DiDC Specification...\n")
-collin_check <- collinearity(all_models[["Joint 4: Full DiDC"]])
+cat("\nChecking collinearity for the Full Joint DiDC Specification (Academic Calendar)...\n")
+collin_check <- collinearity(all_models[["Joint Acad (DiDC)"]])
 print(collin_check)
 
 cat("\nGenerating publication-ready Markdown tables...\n")
