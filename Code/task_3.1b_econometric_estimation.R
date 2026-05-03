@@ -64,8 +64,15 @@ estimate_models <- function(policy_formula, model_name_prefix) {
   res
 }
 
+df_prestige_sample <- df |>
+  filter(!is.na(delta_top_50_caliber))
+
 cat("Estimating 12 specifications via feols with multi-way clustering...\n")
+cat("   - Tuition-only models are restricted to the prestige-observed sample for comparability with caliber and joint models.\n")
+df_full <- df
+df <- df_prestige_sample
 models_tuition <- estimate_models("delta_in_state_tuition", "Tuition")
+df <- df_full
 models_caliber <- estimate_models("delta_top_50_caliber", "Caliber")
 models_joint <- estimate_models("delta_in_state_tuition + delta_top_50_caliber", "Joint")
 

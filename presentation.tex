@@ -41,8 +41,9 @@
 \begin{frame}{Roadmap}
     \begin{itemize}
         \item \textbf{Setup \& Hypotheses:} Spatial boundaries of public university tuition and caliber at state borders.
+        \item \textbf{Literature \& Story:} Why prestige can be priced separately from tuition savings.
         \item \textbf{Empirical Strategy:} The Spatial Difference-in-Discontinuities (DiDC) method.
-        \item \textbf{Data \& Curation:} NBER TAXSIM microsimulations and MSE-optimal bandwidth selection.
+        \item \textbf{Data \& Curation:} Ranking variation, NBER TAXSIM microsimulations, and MSE-optimal bandwidth selection.
         \item \textbf{Results:} 
         \begin{itemize}
             \item Baseline
@@ -91,12 +92,28 @@
 \begin{frame}{Literature \& Contribution}
     \begin{itemize}
         \item \textbf{Tiebout Sorting (1956) \& School Capitalization:} Black (1999) proves housing markets capitalize local K-12 school quality at attendance boundaries.
-        \item \textbf{The Gap:} We know little about whether families sort at the \textit{state level} for higher education.
+        \item \textbf{Value of Education:} A large economics literature studies whether households pay for human capital, peer quality, signaling value, school quality, or access to selective institutions.
+        \item \textbf{Higher-Education Prestige:} A central education question is why households and students value selective universities so strongly.
+        \item \textbf{The Gap:} We know little about whether families sort at the \textit{state level} for higher education, or whether prestige itself is priced separately from tuition savings.
         \item \textbf{Contribution:} 
         \begin{itemize}
             \item Extends Tiebout sorting from K-12 to the higher-education market.
+            \item Provides revealed-preference evidence on how responsive households are to elite university prestige.
             \item Overcomes policy endogeneity typical of macro-state comparisons by using a high-resolution Spatial Difference-in-Discontinuities (DiDC) estimator across 448k estimation observations.
         \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Story: Prestige as an Option Value}
+    \begin{itemize}
+        \item The project is not only about whether college is cheaper across the border.
+        \item It asks whether households pay today for the future option of in-state access to elite public universities.
+        \item That makes the housing market a revealed-preference setting for a broader education-literature question:
+        \begin{itemize}
+            \item How much do households value university prestige itself?
+            \item Is that value visible even before a child applies to college?
+        \end{itemize}
+        \item \textbf{Prediction:} If prestige is the relevant amenity, the effect should be strongest around salient elite tiers and in places where education demand is high.
     \end{itemize}
 \end{frame}
 
@@ -142,18 +159,18 @@
 \begin{frame}{Data Sources \& Variable Construction}
     \begin{table}
         \centering
-        \caption{Summary of Final Estimation Panel (2012--2024)}
+        \caption{Data Sources and Variable Construction}
         \resizebox{0.95\textwidth}{!}{
             \begin{tabular}{lll}
                 \toprule
-                \textbf{Variable Category} & \textbf{Data Source} & \textbf{Specific Variable Construction} \\
+                \textbf{Variable} & \textbf{Source} & \textbf{Construction} \\
                 \midrule
-                Housing Costs & \textbf{Redfin} & Median Price Per SqFt (ZCTA level) \\
-                Tuition & \textbf{IPEDS} & In-State Tuition weighted by enrollment \\
-                Institution Caliber & \textbf{U.S. News} & Historical Ranking (Top 150 available) \\
-                Income Tax & \textbf{NBER TAXSIM} & Simulated Federal \& State Liability\\
-                Macro Controls & \textbf{BEA, BLS} & County/ZCTA Real GDP and Unemployment \\
-                Local Policy & \textbf{ACS / TAXSIM} & Effective Property Tax Rates \\
+                Housing prices & Redfin & Median price per sq.\ ft.\ (ZCTA, annual) \\
+                Tuition & IPEDS & In-state tuition, enrollment-weighted \\
+                University prestige & U.S.\ News & Top 50/100 public university counts by state \\
+                Income taxes & NBER TAXSIM & Simulated federal \& state liability \\
+                Property taxes & ACS 5-year & Effective rate (taxes paid / home value) \\
+                Macro controls & BEA, BLS & County real GDP per capita, unemployment \\
                 \bottomrule
             \end{tabular}
         }
@@ -176,6 +193,21 @@
     \begin{itemize}
         \item \textbf{Financial:} IPEDS panel for in-state tuition weighted by enrollment.
         \item \textbf{Prestige:} U.S. News historical rankings, binned into Top 20, Top 50, and Top 100 state flagship caliber indicators.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{What Variation Identifies Prestige?}
+    \begin{itemize}
+        \item The treatment is the \textbf{cross-border gap} in public university caliber.
+        \item Baseline measure: number of public universities in a state-year ranked in the \textbf{Top 50}.
+        \item Identification comes from \textbf{changes over time} in this gap within the same border segment.
+        \item This is why the design does not rely only on permanent differences like California vs. Nevada.
+        \item \textbf{Important next check:} show the underlying ranking movements directly and test alternative measures:
+        \begin{itemize}
+            \item average public-university rank,
+            \item enrollment-weighted rank,
+            \item admissions-access or program-specific quality measures.
+        \end{itemize}
     \end{itemize}
 \end{frame}
 
@@ -236,24 +268,30 @@
 % 4. Results
 % ---------------------------------------------------------
 
-\begin{frame}{Result I: The "Tuition Illusion"}
+\begin{frame}[shrink=25]{Result I: The "Tuition Illusion"}
     \begin{table}
         \centering
-        \caption{Capitalization of Tuition (Dependent Var: log PPSF)}
-        \resizebox{0.75\textwidth}{!}{
+        \caption{Capitalization of Higher Education Tuition Subsidies (2012--2024)}
+        \resizebox{!}{0.55\textheight}{
             \begin{tabular}{lcc}
                 \toprule
-                & \textbf{(1) Spatial RD} & \textbf{(2) Full DiDC} \\
+                & (1) Spatial RD & (2) Full DiDC \\
                 \midrule
-                $\text{Tuition Gap LATE (\$1k)}$ & $-0.043^{*}$ & $-0.008$ \\
-                 & $(0.022)$ & $(0.013)$ \\
-                $\text{Effective Property Tax Rate}$ & & $-19.494^{***}$ \\
-                 & & $(3.081)$ \\
+                Tuition Gap LATE (\$1k) & $-0.039^{*}$ & $-0.006$ \\
+                 & $(0.022)$ & $(0.014)$ \\
+                Spatial Treatment ($S_i$) & $-0.114^{*}$ & $-0.061$ \\
+                 & $(0.068)$ & $(0.052)$ \\
+                Effective Property Tax Rate & & $-19.040^{***}$ \\
+                 & & $(3.318)$ \\
+                Log Real GDP Per Capita & & $0.035^{***}$ \\
+                 & & $(0.009)$ \\
+                Local Unemployment Rate & & $-0.048^{***}$ \\
+                 & & $(0.009)$ \\
                 \midrule
-                Income Tax / Macro Covariates &  & $\checkmark$ \\
-                Fixed Effects & None & $\text{Seg\_ID} \times \text{Year}$ \\
-                Standard Errors & Single C. & Two-Way C. \\
-                Observations & 196,632 & 128,420 \\
+                TAXSIM Covariates & & $\checkmark$ \\
+                Fixed Effects & None & Seg $\times$ Year \\
+                Observations & 184,304 & 118,179 \\
+                $R^2$ & 0.038 & 0.811 \\
                 \bottomrule
             \end{tabular}
         }
@@ -263,49 +301,91 @@
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Result II: The Joint Capitalization Model}
+\begin{frame}[shrink=25]{Result II: Prestige Capitalization}
     \begin{table}
         \centering
-        \caption{Joint Model: Tuition vs. Top 50 Prestige (Dep Var: log PPSF)}
-        \resizebox{0.75\textwidth}{!}{
+        \caption{Capitalization of Elite Higher Education Institutional Caliber (Top 50, 2012--2024)}
+        \resizebox{!}{0.55\textheight}{
             \begin{tabular}{lcc}
                 \toprule
-                & \textbf{(1) Base DiDC} & \textbf{(2) Full DiDC (With Taxes)} \\
+                & (1) Spatial RD & (2) Full DiDC \\
                 \midrule
-                $\text{Caliber Gap LATE (Top 50)}$ & $0.093^{**}$ & $\mathbf{0.098^{***}}$ \\
-                 & $(0.041)$ & $(0.031)$ \\
-                $\text{Tuition Gap LATE (\$1k)}$ & $-0.026^{***}$ & $-0.008$ \\
-                 & $(0.009)$ & $(0.013)$ \\
+                Caliber Gap LATE (Top 50) & $0.010$ & $0.086^{**}$ \\
+                 & $(0.042)$ & $(0.036)$ \\
+                Spatial Treatment ($S_i$) & $-0.128$ & $-0.037$ \\
+                 & $(0.088)$ & $(0.054)$ \\
+                Effective Property Tax Rate & & $-19.521^{***}$ \\
+                 & & $(3.293)$ \\
+                Log Real GDP Per Capita & & $0.040^{***}$ \\
+                 & & $(0.010)$ \\
+                Local Unemployment Rate & & $-0.042^{***}$ \\
+                 & & $(0.009)$ \\
                 \midrule
                 TAXSIM Covariates & & $\checkmark$ \\
-                Fixed Effects & $\text{Seg} \times \text{Year}$ & $\text{Seg} \times \text{Year}$ \\
-                Standard Errors & Two-Way C. & Two-Way C. \\
-                Observations & 135,402 & 128,420 \\
+                Fixed Effects & None & Seg $\times$ Year \\
+                Observations & 184,304 & 118,179 \\
+                $R^2$ & 0.004 & 0.811 \\
+                \bottomrule
+            \end{tabular}
+        }
+    \end{table}
+\end{frame}
+
+\begin{frame}[shrink=25]{Result III: The Joint Capitalization Model}
+    \begin{table}
+        \centering
+        \caption{Joint Capitalization Model: Tuition and Top 50 Caliber (2012--2024)}
+        \resizebox{!}{0.55\textheight}{
+            \begin{tabular}{lcc}
+                \toprule
+                & (1) Spatial RD & (2) Full DiDC \\
+                \midrule
+                Caliber Gap LATE (Top 50) & $0.032$ & $\mathbf{0.090^{***}}$ \\
+                 & $(0.046)$ & $(0.031)$ \\
+                Tuition Gap LATE (\$1k) & $-0.040^{*}$ & $-0.009$ \\
+                 & $(0.022)$ & $(0.014)$ \\
+                Effective Property Tax Rate & & $-19.195^{***}$ \\
+                 & & $(3.273)$ \\
+                Log Real GDP Per Capita & & $0.037^{***}$ \\
+                 & & $(0.010)$ \\
+                Local Unemployment Rate & & $-0.044^{***}$ \\
+                 & & $(0.008)$ \\
+                \midrule
+                TAXSIM Covariates & & $\checkmark$ \\
+                Fixed Effects & None & Seg $\times$ Year \\
+                Observations & 184,304 & 118,179 \\
+                $R^2$ & 0.039 & 0.811 \\
                 \bottomrule
             \end{tabular}
         }
     \end{table}
     \begin{itemize}
-        \item \textbf{Concrete Magnitude:} Gaining in-state access to a Top 50 university increases local housing prices by a precisely estimated \textbf{9.8\%} ($p < 0.01$) exactly at the state border.
+        \item \textbf{Concrete Magnitude:} Gaining in-state access to a Top 50 university increases local housing prices by a precisely estimated \textbf{9.0\%} ($p < 0.01$) exactly at the state border.
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Exploring Option-Value Non-Linearities}
+\begin{frame}[shrink=30]{Exploring Option-Value Non-Linearities}
     \begin{itemize}
         \item Does the prestige tier matter? Yes. We observe a structural inverse U-shape in the willingness to pay for elite access.
     \end{itemize}
     \vspace{0.3cm}
     \begin{table}
         \centering
-        \caption{LATE Premium by Flagship Caliber Tier (Full DiDC / Two-Way SE)}
-        \resizebox{0.8\textwidth}{!}{
-            \begin{tabular}{lcc}
+        \caption{Option Value Non-Linearities: Caliber Tier Comparison (Two-Way Clustered SE)}
+        \resizebox{!}{0.52\textheight}{
+            \begin{tabular}{lccc}
                 \toprule
-                \textbf{Caliber Tier} & \textbf{Coefficient} & \textbf{Std. Error} \\
+                \textbf{Caliber Tier} & \textbf{Coefficient} & \textbf{Std. Error} & \textbf{Observations} \\
                 \midrule
-                Top 100 Gap (Generic Publics) & $0.028$ & $(0.027)$ \\
-                Top 50 Gap (Elite Flagships) & $\mathbf{0.098^{***}}$ & $(0.031)$ \\
-                Top 20 Gap (Hyper-Elite) & $0.010$ & $(0.048)$ \\
+                Top 20 Gap & $0.062$ & $(0.047)$ & 118,179 \\
+                Top 30 Gap & $0.196^{***}$ & $(0.062)$ & 118,179 \\
+                Top 40 Gap & $0.086^{**}$ & $(0.034)$ & 118,179 \\
+                Top 50 Gap & $\mathbf{0.090^{***}}$ & $(0.031)$ & 118,179 \\
+                Top 60 Gap & $0.079^{**}$ & $(0.031)$ & 118,179 \\
+                Top 70 Gap & $0.065$ & $(0.041)$ & 118,179 \\
+                Top 80 Gap & $0.035$ & $(0.026)$ & 118,179 \\
+                Top 100 Gap & $0.026$ & $(0.027)$ & 118,179 \\
+                Top 150 Gap & $-0.000$ & $(0.028)$ & 118,179 \\
                 \bottomrule
             \end{tabular}
         }
@@ -318,7 +398,11 @@
 \begin{frame}{Event Study: Validation \& Market Efficiency}
     \begin{columns}
         \begin{column}{0.65\textwidth}
-            \includegraphics[height=0.75\textheight]{Output/event_study_3_binned.pdf}
+            \IfFileExists{Output/event_study_3_binned.pdf}{%
+            \includegraphics[height=0.75\textheight]{Output/event_study_3_binned.pdf}%
+            }{%
+            \includegraphics[height=0.75\textheight]{Output/event_study_2_corrected.pdf}%
+            }
         \end{column}
         \begin{column}{0.35\textwidth}
             \textbf{Key Takeaways:}
@@ -330,14 +414,38 @@
     \end{columns}
 \end{frame}
 
+\begin{frame}{Identification Threats We Need to Address}
+    \begin{itemize}
+        \item \textbf{Main threat:} omitted variables may jointly move rankings and real estate prices.
+        \item Example: a state economic boom could raise university resources and housing demand at the same time.
+        \item Current responses:
+        \begin{itemize}
+            \item border-segment-by-year fixed effects compare immediate cross-border neighbors,
+            \item TAXSIM and property-tax controls absorb large fiscal confounders,
+            \item event-study leads show no pre-trend before prestige gaps open.
+        \end{itemize}
+        \item \textbf{Interpretation:} strong suggestive evidence of prestige capitalization, with exogeneity of ranking variation as the key remaining publication hurdle.
+    \end{itemize}
+\end{frame}
+
 % ---------------------------------------------------------
 % 5. Heterogeneity & Conclusion
 % ---------------------------------------------------------
 
 \begin{frame}{Caveats \& Limitations}
     \begin{itemize}
-        \item \textbf{Local Average Treatment Effect (LATE):} The 9.8\% premium is intensely localized to the immediate geospatial state border. Housing markets deep in the interior of a state possess considerably lower spatial elasticity due to commuting limits.
+        \item \textbf{Local Average Treatment Effect (LATE):} The 9.0\% premium is intensely localized to the immediate geospatial state border. Housing markets deep in the interior of a state possess considerably lower spatial elasticity due to commuting limits.
         \item \textbf{Prestige Definition:} U.S. News Top 50 is a known, highly publicized public proxy. The genuine structural option value might operate on specific major availability (e.g., highly restricted elite Engineering or Pre-Med programs) embedded solely within those Top 50 schools.
+        \item \textbf{Ranking Exogeneity:} We still need to show more clearly why ranking movements are not caused by the same state trends that move housing prices.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Next Research Steps}
+    \begin{itemize}
+        \item \textbf{Show the ranking variation:} plot how ranks and Top 50 status change over time across treated border dyads.
+        \item \textbf{Measure prestige more richly:} compare Top 50 counts with average rank, enrollment-weighted rank, and admissions-access measures.
+        \item \textbf{Test mechanism heterogeneity:} estimate larger effects in counties with younger populations, more families, or higher expected college demand.
+        \item \textbf{Stress-test identification:} add spillover checks, donut regressions, and a stronger institutional discussion of U.S. News ranking shocks.
     \end{itemize}
 \end{frame}
 
@@ -354,7 +462,11 @@
 
 \begin{frame}{Visual Identification: The Prestige Discontinuity}
     \begin{center}
-        \includegraphics[width=0.6\textwidth]{Output/rd_plot_prestige.pdf}
+        \IfFileExists{Output/rd_plot_prestige.pdf}{%
+        \includegraphics[height=0.56\textheight]{Output/rd_plot_prestige.pdf}
+        }{%
+        \fbox{\parbox{0.6\textwidth}{\centering RD prestige plot not found in \texttt{Output/}.}}
+        }
     \end{center}
     \begin{itemize}
         \item \textbf{Identification:} Binned scatter plots comparing cross-border housing prices in segments with top-tier access gaps.
@@ -367,25 +479,32 @@
 % ---------------------------------------------------------
 \appendix
 
-\begin{frame}{Appendix A: Pure Price Elasticity Restriction}
+\begin{frame}[shrink=25]{Appendix A: Pure Price Elasticity Restriction}
     \begin{itemize}
         \item Restricted the panel strictly to border segments where \textbf{$\Delta$ Top 50 = 0}.
         \item Does the financial price surface when Caliber prestige is identical?
     \end{itemize}
     \begin{table}
         \centering
-        \caption{Pure Price Model (Dependent Var: log PPSF)}
-        \resizebox{0.55\textwidth}{!}{
+        \caption{Pure Price Elasticity: Constant Top 50 Caliber (Caliber Gap $= 0$)}
+        \resizebox{!}{0.50\textheight}{
             \begin{tabular}{lcc}
                 \toprule
-                & \textbf{(1) Single Cluster} & \textbf{(2) Two-Way Cluster} \\
+                & (1) Single Cluster & (2) Two-Way Cluster \\
                 \midrule
-                $\text{Tuition Gap LATE (\$1k)}$ & $-0.003$ & $-0.003$ \\
-                 & $(0.005)$ & $(0.013)$ \\
+                Tuition Gap LATE (\$1k) & $-0.002$ & $-0.002$ \\
+                 & $(0.005)$ & $(0.016)$ \\
+                Effective Property Tax Rate & $-19.989^{***}$ & $-19.989^{***}$ \\
+                 & $(2.484)$ & $(3.652)$ \\
+                Log Real GDP Per Capita & $0.032^{***}$ & $0.032^{***}$ \\
+                 & $(0.004)$ & $(0.010)$ \\
+                Local Unemployment Rate & $-0.035^{***}$ & $-0.035^{***}$ \\
+                 & $(0.006)$ & $(0.007)$ \\
                 \midrule
-                Covariates & $\checkmark$ & $\checkmark$ \\
-                Fixed Effects & $\text{Seg} \times \text{Year}$ & $\text{Seg} \times \text{Year}$ \\
-                Observations & 79,318 & 79,318 \\
+                TAXSIM Covariates & $\checkmark$ & $\checkmark$ \\
+                Fixed Effects & Seg $\times$ Year & Seg $\times$ Year \\
+                Observations & 72,999 & 72,999 \\
+                $R^2$ & 0.831 & 0.831 \\
                 \bottomrule
             \end{tabular}
         }
@@ -393,52 +512,59 @@
     \textbf{Result:} A precise, perfectly-identified zero effect for raw financial cost.
 \end{frame}
 
-\begin{frame}{Appendix B: Marginal Tax Cliff Restriction}
+\begin{frame}[shrink=25]{Appendix B: Marginal Tax Cliff Restriction}
     \begin{itemize}
         \item Restricted panel strictly to dyads located in the lowest income tax differential quartile. Eliminates Tiebout income-tax haven sorting as a confounder.
     \end{itemize}
     \begin{table}
         \centering
-        \caption{Tax Restricted Model (Dependent Var: log PPSF)}
-        \resizebox{0.65\textwidth}{!}{
+        \caption{Marginal Tax Cliff Capitalization: Lowest Quartile Tax Differential}
+        \resizebox{!}{0.50\textheight}{
             \begin{tabular}{lcc}
                 \toprule
-                & \textbf{(1) Single Cluster} & \textbf{(2) Two-Way Cluster} \\
+                & (1) Single Cluster & (2) Two-Way Cluster \\
                 \midrule
-                $\text{Caliber Gap LATE (Top 50)}$ & $0.085^{*}$ & $0.085$ \\
-                 & $(0.048)$ & $(0.082)$ \\
-                $\text{Tuition Gap LATE (\$1k)}$ & $0.014$ & $0.014$ \\
-                 & $(0.009)$ & $(0.024)$ \\
+                Caliber Gap LATE (Top 50) & $0.088^{*}$ & $0.088$ \\
+                 & $(0.053)$ & $(0.091)$ \\
+                Tuition Gap LATE (\$1k) & $0.012$ & $0.012$ \\
+                 & $(0.009)$ & $(0.028)$ \\
+                Effective Property Tax Rate & $-24.835^{***}$ & $-24.835^{***}$ \\
+                 & $(1.882)$ & $(4.544)$ \\
                 \midrule
-                Covariates & $\checkmark$ & $\checkmark$ \\
-                Fixed Effects & $\text{Seg} \times \text{Year}$ & $\text{Seg} \times \text{Year}$ \\
-                Observations & 36,936 & 36,936 \\
+                TAXSIM / Macro Covariates & $\checkmark$ & $\checkmark$ \\
+                Fixed Effects & Seg $\times$ Year & Seg $\times$ Year \\
+                Observations & 33,325 & 33,325 \\
+                $R^2$ & 0.827 & 0.827 \\
                 \bottomrule
             \end{tabular}
         }
     \end{table}
 \end{frame}
 
-\begin{frame}{Appendix C: Stability Across Timeframes}
+\begin{frame}[shrink=25]{Appendix C: Stability Across Timeframes}
     \begin{itemize}
         \item Does the Remote Work / COVID housing boom rupture our parameters?
     \end{itemize}
     \begin{table}
         \centering
-        \caption{Pre-2019 vs Post-2020 Parameters (Two-way Cluster)}
-        \resizebox{0.65\textwidth}{!}{
+        \caption{Timeframe Capitalization Heterogeneity: Pre-COVID vs.\ COVID Era}
+        \resizebox{!}{0.50\textheight}{
             \begin{tabular}{lcc}
                 \toprule
-                & \textbf{(1) Pre-COVID} & \textbf{(2) Post-COVID} \\
+                & (1) Pre-COVID & (2) Post-COVID \\
                 \midrule
-                $\text{Caliber Gap LATE (Top 50)}$ & $0.118^{***}$ & $0.062$ \\
-                 & $(0.040)$ & $(0.041)$ \\
-                $\text{Tuition Gap LATE (\$1k)}$ & $-0.015$ & $-0.001$ \\
-                 & $(0.015)$ & $(0.010)$ \\
+                Caliber Gap LATE (Top 50) & $0.105^{***}$ & $0.067^{*}$ \\
+                 & $(0.038)$ & $(0.037)$ \\
+                Tuition Gap LATE (\$1k) & $-0.015$ & $-0.002$ \\
+                 & $(0.017)$ & $(0.011)$ \\
+                Effective Property Tax Rate & $-19.727^{***}$ & $-17.915^{***}$ \\
+                 & $(3.736)$ & $(2.993)$ \\
                 \midrule
-                Covariates & $\checkmark$ & $\checkmark$ \\
-                Fixed Effects & $\text{Seg} \times \text{Year}$ & $\text{Seg} \times \text{Year}$ \\
-                Observations & 78,046 & 50,374 \\
+                TAXSIM / Macro Covariates & $\checkmark$ & $\checkmark$ \\
+                Fixed Effects & Seg $\times$ Year & Seg $\times$ Year \\
+                Standard Errors & Two-Way & Two-Way \\
+                Observations & 71,531 & 46,648 \\
+                $R^2$ & 0.774 & 0.837 \\
                 \bottomrule
             \end{tabular}
         }

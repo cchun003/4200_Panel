@@ -4,7 +4,7 @@
 
 ### table_1_tuition_didc.md
 **Caption:** Table 1: Capitalization of Higher Education Tuition Subsidies (2012-2024)
-**Description:** This table isolates the capitalization effect of the purely financial component of the higher education policy gap (in-state tuition). Models progress from raw Spatial OLS to full Spatial Difference-in-Discontinuities (DiDC) adding border-segment-by-year fixed effects and macroeconomic time-varying covariates (local property taxes, income taxes, real GDP. capita, and unemployment). Both single-way and two-way standard errors are mapped across baseline results.
+**Description:** This table isolates the capitalization effect of the purely financial component of the higher education policy gap (in-state tuition), restricted to the prestige-observed sample used in the Top 50 caliber and joint models. Models progress from raw Spatial OLS to full Spatial Difference-in-Discontinuities (DiDC) adding border-segment-by-year fixed effects and macroeconomic time-varying covariates (local property taxes, income taxes, real GDP per capita, and unemployment). Both single-way and two-way standard errors are mapped across baseline results.
 
 ### table_2_caliber_didc.md
 **Caption:** Table 2: Capitalization of Elite Higher Education Institutional Caliber (Top 50, 2012-2024)
@@ -16,7 +16,7 @@
 
 ### event_study_3_binned.pdf
 **Caption:** Figure 1: Spatial Distributed Lag Event Study (Top 50 Prestige Capitalization)
-**Description:** This plot provides graphical validation for the strict parallel trends assumption. By testing distributed spatial leads (t < 0) against the dyadic prestige shock, it confirms housing markets exhibit zero anticipatory cross-border sorting prior to the prestige gap opening. Furthermore, it explicitly confirms the Efficient Market Hypothesis in residential sorting by cleanly isolating the shock significance at t=0, establishing that the 9.8% static premium is priced in instantaneously.
+**Description:** This plot provides graphical validation for the strict parallel trends assumption. By testing distributed spatial leads (t < 0) against the dyadic prestige shock, it confirms housing markets exhibit zero anticipatory cross-border sorting prior to the prestige gap opening. Furthermore, it explicitly confirms the Efficient Market Hypothesis in residential sorting by cleanly isolating the shock significance at t=0, establishing that the 9.0% static premium is priced in instantaneously.
 
 ### het_table_2_timeframes.md
 **Caption:** Table 4 (Het): Timeframe Capitalization Heterogeneity (Pre-COVID vs. COVID-Era)
@@ -36,4 +36,4 @@
 
 ### rd_plot_prestige.pdf
 **Caption:** Figure 2: Regression Discontinuity Identification (Prestige Gap Capitalization)
-**Description:** Visual validation of the 9.8% prestige premium using binned scatter plots. The plot highlights houses on either side of the state border, specifically for segments where adjacent states provide different access to Top 50 universities. The high-order polynomial fit reveals a clear, structural discontinuity in the price surface at the border, confirming that households are willing to pay significant premiums for resident access to elite public flagship institutions.
+**Description:** Visual validation of the 9.0% prestige premium using binned scatter plots. The plot highlights houses on either side of the state border, specifically for segments where adjacent states provide different access to Top 50 universities. The high-order polynomial fit reveals a clear, structural discontinuity in the price surface at the border, confirming that households are willing to pay significant premiums for resident access to elite public flagship institutions.
